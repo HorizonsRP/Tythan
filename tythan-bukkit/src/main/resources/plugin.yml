@@ -2,4 +2,5 @@ name: Tythan
 main: co.lotc.core.bukkit.TythanBukkit
 version: ${project.version}
 depend: [ProtocolLib]
+softdepend: [LuckPerms]
 api-version: 1.13
