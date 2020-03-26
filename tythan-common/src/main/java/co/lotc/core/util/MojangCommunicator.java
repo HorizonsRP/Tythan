@@ -130,11 +130,17 @@ public class MojangCommunicator {
 		}
 	}
 
-	public static JsonObject requestSkin(UUID uuid) throws IOException{
+	public static String requestSkinValue(UUID uuid) throws IOException {
+		return requestSkin(uuid).get("value").getAsString();
+	}
+	public static String requestSkinValue(String uuidUser) throws IOException {
+		return requestSkin(uuidUser).get("value").getAsString();
+	}
+	public static JsonObject requestSkin(UUID uuid) throws IOException {
 		String uuidUser = uuid.toString().replace("-", "");
 		return requestSkin(uuidUser);
 	}
-	public static JsonObject requestSkin(String uuidUser) throws IOException{
+	public static JsonObject requestSkin(String uuidUser) throws IOException {
 		InputStreamReader in = null;
 		HttpURLConnection con = null;
 
