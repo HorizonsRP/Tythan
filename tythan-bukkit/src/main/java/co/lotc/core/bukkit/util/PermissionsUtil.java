@@ -12,12 +12,13 @@ import java.util.UUID;
 public class PermissionsUtil {
 
 	/**
-	 * Gets the highest numerical representation for a given permission node. permission.*, *, and permission.unlimited grant max value.
+	 * Gets the highest or lowest numerical representation for a given permission node. permission.*, *, and permission.unlimited grant max value.
 	 * @param player UUID of the player in question.
 	 * @param permission Start of the permission node to check. ex: tythan.permission will look for the highest x in tythan.permission.x
+	 * @param min If true, will search for the lowest numerical representation.
 	 * @return Highest permission node value.
 	 */
-	public static int getMaxPermission(UUID player, String permission, int defaultAmount) {
+	public static int getMinMaxPermission(UUID player, String permission, int defaultAmount, boolean min) {
 		int output = defaultAmount;
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
@@ -35,9 +36,17 @@ public class PermissionsUtil {
 						} else if (thisPerm.startsWith(permission)) {
 							String[] split = node.getKey().replace('.', ' ').split(" ");
 							int value = Integer.parseInt(split[split.length-1]);
-							if (value > output) {
-								output = value;
+
+							if (min) {
+								if (value < output) {
+									output = value;
+								}
+							} else {
+								if (value > output) {
+									output = value;
+								}
 							}
+
 						}
 					}
 				}
