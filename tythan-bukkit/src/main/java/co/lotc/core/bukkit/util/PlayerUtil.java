@@ -17,6 +17,7 @@ public class PlayerUtil {
 
 	/**
 	 * Checks via Bukkit method first for online players, then resorts to MojangCommunicator if not found.
+	 * Stores UUIDs locally for 5 mins to prevent contacting Mojang for data we recently grabbed.
 	 * @param name Username of the player you wish to find.
 	 * @return UUID if found, otherwise returns null.
 	 */
