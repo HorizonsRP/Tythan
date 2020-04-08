@@ -40,11 +40,11 @@ public class PlayerUtil {
 			} else {
 				uuid = p.getUniqueId();
 			}
-		}
 
-		if (uuid != null) {
-			checkedUUIDs.put(name, uuid);
-			removeForRefresh(name).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
+			if (uuid != null) {
+				checkedUUIDs.put(name, uuid);
+				removeForRefresh(name).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
+			}
 		}
 
 		return uuid;
