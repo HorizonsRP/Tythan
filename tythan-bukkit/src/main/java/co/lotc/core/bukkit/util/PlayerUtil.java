@@ -13,7 +13,7 @@ import java.util.UUID;
 public class PlayerUtil {
 
 	private static final int REFRESH_TIME = 6000;
-	private Map<String, UUID> checkedUUIDs = new HashMap<>();
+	private static Map<String, UUID> checkedUUIDs = new HashMap<>();
 
 	/**
 	 * Checks via Bukkit method first for online players, then resorts to MojangCommunicator if not found.
@@ -21,7 +21,7 @@ public class PlayerUtil {
 	 * @param name Username of the player you wish to find.
 	 * @return UUID if found, otherwise returns null.
 	 */
-	public UUID getPlayerUUID(String name) {
+	public static UUID getPlayerUUID(String name) {
 		UUID uuid = null;
 		for (String key : checkedUUIDs.keySet()) {
 			if (key.equalsIgnoreCase(name)) {
@@ -50,7 +50,7 @@ public class PlayerUtil {
 		return uuid;
 	}
 
-	private BukkitRunnable removeForRefresh(String name) {
+	private static BukkitRunnable removeForRefresh(String name) {
 		return new BukkitRunnable() {
 			@Override
 			public void run() {
