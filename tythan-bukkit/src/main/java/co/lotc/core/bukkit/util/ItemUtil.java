@@ -315,4 +315,17 @@ public class ItemUtil {
         is.setItemMeta(m);
         return is;
 	}
+
+	/**
+	 * Converts a List of ItemStack to an Array of ItemStack
+	 * @param items List of ItemStack
+	 * @return An array of ItemStack.
+	 */
+	public static ItemStack[] itemListToArray(List<ItemStack> items) {
+		ItemStack[] arrayItems = new ItemStack[items.size()];
+		for (int i = 0; i < items.size(); i++) {
+			arrayItems[i] = items.get(i);
+		}
+		return arrayItems;
+	}
 }

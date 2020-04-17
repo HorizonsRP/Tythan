@@ -112,7 +112,7 @@ public class InventoryUtil {
 	}
 
 	public static ItemStack[] deserializeItemsToArray(String listOfItems) {
-		return (ItemStack[]) deserializeItems(listOfItems).toArray();
+		return ItemUtil.itemListToArray(deserializeItems(listOfItems));
 	}
 
 	@SuppressWarnings("unchecked")
