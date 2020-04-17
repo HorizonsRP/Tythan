@@ -14,6 +14,7 @@ public class PlayerUtil {
 
 	private static final int REFRESH_TIME = 6000;
 	private static Map<String, UUID> checkedUUIDs = new HashMap<>();
+	private static Map<UUID, String> checkedTextures = new HashMap<>();
 
 	/**
 	 * Checks via Bukkit method first for online players, then resorts to MojangCommunicator if not found.
@@ -57,6 +58,38 @@ public class PlayerUtil {
 				checkedUUIDs.remove(name);
 			}
 		};
+	}
+	private static BukkitRunnable removeForRefresh(UUID uuid) {
+		return new BukkitRunnable() {
+			@Override
+			public void run() {
+				checkedTextures.remove(uuid);
+			}
+		};
+	}
+
+	/**
+	 * Checks stored textures first then resorts to MojangCommunicator if not found.
+	 * Stores textures locally for 5 mins to prevent contacting Mojang for data we recently grabbed.
+	 * @param uuid UUID of the player in question.
+	 * @return Texture if found, otherwise null.
+	 */
+	public static String getPlayerTexture(UUID uuid) {
+		String texture = checkedTextures.get(uuid);
+
+		if (texture == null) {
+			try {
+				texture = MojangCommunicator.requestSkinValue(uuid);
+			} catch (Exception ignored) {
+			}
+		}
+
+		if (texture != null) {
+			checkedTextures.put(uuid, texture);
+			removeForRefresh(uuid).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
+		}
+
+		return texture;
 	}
 
 }
