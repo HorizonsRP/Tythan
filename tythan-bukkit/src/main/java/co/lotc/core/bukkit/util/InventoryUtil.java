@@ -111,6 +111,10 @@ public class InventoryUtil {
 		return yaml.saveToString();
 	}
 
+	public static ItemStack[] deserializeItemsToArray(String listOfItems) {
+		return (ItemStack[]) deserializeItems(listOfItems).toArray();
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<ItemStack> deserializeItems(String listOfItems) {
 		YamlConfiguration yaml = new YamlConfiguration();
