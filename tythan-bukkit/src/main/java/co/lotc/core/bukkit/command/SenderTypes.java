@@ -60,7 +60,7 @@ public final class SenderTypes {
 				op = Bukkit.getOfflinePlayer(s); //Deprecated
 			}
 			//TODO: maybe do this in AC for the more powerful name registry?
-			if(op != null && op.hasPlayedBefore()) return op;
+			if(op.hasPlayedBefore()) return op;
 			else return null;
 		})
 		.completer(PLAYER_COMPLETER)

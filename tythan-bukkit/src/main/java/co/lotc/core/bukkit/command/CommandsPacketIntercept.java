@@ -50,12 +50,9 @@ public class CommandsPacketIntercept {
 	}
 	
 	private void despigot(RootCommandNode<Object> root, String alias) {
-		var iter = root.getChildren().iterator();
-		while(iter.hasNext()) {
-			var kid = iter.next(); //Search spigot's attempt at registering the argument
-			if(kid.getName().equals(alias))
-				iter.remove(); //Killing the skeletal framework of spigot gives us full Brigadier power
-		}
+		//Search spigot's attempt at registering the argument
+		//Killing the skeletal framework of spigot gives us full Brigadier power
+		root.getChildren().removeIf(kid -> kid.getName().equals(alias));
 	}
 	
 	
