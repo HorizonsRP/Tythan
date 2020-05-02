@@ -31,17 +31,17 @@
 	</repositories>
 
    <dependencies>
-	<dependency>
-		<groupId>co.lotc</groupId>
-		<artifactId>tythan-common</artifactId>
-		<version>${project.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>com.mojang</groupId>
-		<artifactId>brigadier</artifactId>
-		<version>1.0.17</version>
-		<scope>provided</scope>
-	</dependency>
+       <dependency>
+           <groupId>co.lotc</groupId>
+		   <artifactId>tythan-common</artifactId>
+		   <version>${project.version}</version>
+       </dependency>
+       <dependency>
+           <groupId>com.mojang</groupId>
+           <artifactId>brigadier</artifactId>
+           <version>1.0.17</version>
+           <scope>provided</scope>
+       </dependency>
        <dependency>
            <groupId>com.comphenix.protocol</groupId>
            <artifactId>ProtocolLib</artifactId>
@@ -53,11 +53,23 @@
            <version>5.0</version>
            <scope>provided</scope>
        </dependency>
-	<dependency>
-		<groupId>com.destroystokyo.paper</groupId>
-		<artifactId>paper-api</artifactId>
-		<version>1.13.2-R0.1-SNAPSHOT</version>
-	</dependency>
+       <dependency>
+           <groupId>com.destroystokyo.paper</groupId>
+           <artifactId>paper-api</artifactId>
+           <version>1.13.2-R0.1-SNAPSHOT</version>
+           <exclusions>
+               <exclusion>
+                   <groupId>net.md-5</groupId>
+                   <artifactId>bungeecord-chat</artifactId>
+               </exclusion>
+           </exclusions>
+       </dependency>
+       <dependency>
+           <groupId>net.md-5</groupId>
+           <artifactId>bungeecord-chat</artifactId>
+           <version>1.15-SNAPSHOT</version>
+           <scope>provided</scope>
+       </dependency>
    </dependencies>
 
   <build>
