@@ -23,7 +23,7 @@ public final class MessageUtil {
 	
 	public static BaseComponent legacyAdd(BaseComponent m, String toAdd) {
 		Arrays.stream(TextComponent.fromLegacyText(toAdd))
-			.forEach(bc->m.addExtra(bc));
+			.forEach(m::addExtra);
 		return m;
 	}
 	
