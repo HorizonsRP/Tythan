@@ -1,5 +1,6 @@
 package co.lotc.core.bukkit;
 
+import co.lotc.core.bukkit.convo.BookListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
@@ -41,6 +42,7 @@ public class TythanBukkit extends JavaPlugin implements Tythan {
 		registerCommandParameterTypes();
 		listen(new MenuListener());
 		listen(new RestrictionListener());
+		listen(new BookListener());
 		
 		Run.as(this).delayed(2, ()->{ //Brigadier singleton deep inside NMS: get and inject
 			CommandNodeManager.getInstance().inject(BrigadierProvider.get().getBrigadier().getRoot());
