@@ -1,6 +1,7 @@
 package co.lotc.core.bukkit.convo;
 
 import co.lotc.core.bukkit.TythanBukkit;
+import co.lotc.core.bukkit.util.ItemUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,16 +27,18 @@ public class BookListener implements Listener {
 	 */
 	@EventHandler(ignoreCancelled=true)
 	public void onBookClose(PlayerEditBookEvent e) {
-		UUID uuid = e.getPlayer().getUniqueId();
-		if (bookStreamMap.containsKey(uuid)) {
-			BookStream stream = bookStreamMap.get(uuid);
-			bookStreamMap.remove(uuid);
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					stream.onBookClose();
-				}
-			}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+		if (ItemUtil.hasCustomTag(e.getPreviousBookMeta(), BookStream.BOOK_TAG)) {
+			UUID uuid = e.getPlayer().getUniqueId();
+			if (bookStreamMap.containsKey(uuid)) {
+				BookStream stream = bookStreamMap.get(uuid);
+				bookStreamMap.remove(uuid);
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						stream.onBookClose();
+					}
+				}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+			}
 		}
 	}
 
