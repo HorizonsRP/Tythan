@@ -30,21 +30,30 @@ public abstract class BookStream {
 		return null;
 	}
 
-	// SET //
+	/**
+	 * Pass through a book to use as the base for this interaction.
+	 * @param book Must be a Material.WRITABLE_BOOK.
+	 */
 	public void setBookData(ItemStack book) {
 		if (book.getType().equals(Material.WRITABLE_BOOK)) {
 			this.book = book;
 		}
 	}
 
-	// START //
-	public void open(Player p) {
-		ItemUtil.setCustomTag(this.book, BOOK_TAG, p.getUniqueId().toString());
-		BookListener.addMap(p, this);
-		BookUtil.openBook(book, p);
+	/**
+	 * Opens the book for the given player and registers them to the BookListener.
+	 * @param player The player to open the book.
+	 */
+	public void open(Player player) {
+		ItemUtil.setCustomTag(this.book, BOOK_TAG, player.getUniqueId().toString());
+		BookListener.addMap(player, this);
+		BookUtil.openBook(book, player);
 	}
 
-	// END //
+	/**
+	 * This runs when the player exits the book they were editing.
+	 * Use getItem() and getMeta() to access the stored data.
+	 */
 	public abstract void onBookClose();
 
 }

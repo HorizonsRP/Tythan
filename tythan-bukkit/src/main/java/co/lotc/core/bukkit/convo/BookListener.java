@@ -1,9 +1,11 @@
 package co.lotc.core.bukkit.convo;
 
+import co.lotc.core.bukkit.TythanBukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,12 @@ public class BookListener implements Listener {
 		if (bookStreamMap.containsKey(uuid)) {
 			BookStream stream = bookStreamMap.get(uuid);
 			bookStreamMap.remove(uuid);
-			stream.onBookClose();
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					stream.onBookClose();
+				}
+			}.runTaskLaterAsynchronously(TythanBukkit.get(), 2);
 		}
 	}
 
