@@ -17,6 +17,9 @@ import org.bukkit.inventory.meta.BookMeta;
  *
  */
 public class BookUtil {
+	public static final int MAX_PAGE_CHARS = 255;
+	public static final int MAX_PAGE_LINES = 14;
+
 	private static boolean initialised = false;
 	private static Method getHandle;
 	private static Method openBook;
