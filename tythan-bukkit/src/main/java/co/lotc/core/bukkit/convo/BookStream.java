@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public abstract class BookStream {
 
-	private static final String BOOK_TAG = "Tythan_BookStream";
+	private static final String BOOK_TAG = "Tythan-BookStream";
 
 	private ItemStack book;
 
