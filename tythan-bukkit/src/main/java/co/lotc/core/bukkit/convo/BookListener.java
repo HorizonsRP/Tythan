@@ -15,11 +15,15 @@ public class BookListener implements Listener {
 
 	private static Map<UUID, BookStream> bookStreamMap = new HashMap<>();
 
-	public static void addMap(Player p, BookStream stream) {
+	protected static void addMap(Player p, BookStream stream) {
 		bookStreamMap.put(p.getUniqueId(), stream);
 	}
 
-	// LISTEN //
+	/**
+	 * Plays when a book is closed (PlayerEditBookEvent) to remove the item
+	 * BookStream from the list, if it's on it. Plays the BookStream's
+	 * onBookClose method after 5 ticks.
+	 */
 	@EventHandler(ignoreCancelled=true)
 	public void onBookClose(PlayerEditBookEvent e) {
 		UUID uuid = e.getPlayer().getUniqueId();
@@ -31,7 +35,7 @@ public class BookListener implements Listener {
 				public void run() {
 					stream.onBookClose();
 				}
-			}.runTaskLaterAsynchronously(TythanBukkit.get(), 2);
+			}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
 		}
 	}
 
