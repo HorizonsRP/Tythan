@@ -19,11 +19,17 @@ public abstract class BookStream {
 
 	private ItemStack book;
 
-	// GET //
-	private ItemStack getItem() {
+	/**
+	 * Return the current book as an item.
+	 */
+	public ItemStack getItem() {
 		return this.book;
 	}
-	private BookMeta getMeta() {
+
+	/**
+	 * Return the meta of the current book as BookMeta
+	 */
+	public BookMeta getMeta() {
 		if (this.book.getItemMeta() instanceof BookMeta) {
 			return (BookMeta) this.book.getItemMeta();
 		}
