@@ -2,10 +2,12 @@ package co.lotc.core.bukkit.convo;
 
 import co.lotc.core.bukkit.TythanBukkit;
 import co.lotc.core.bukkit.util.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class BookListener implements Listener {
 	/**
 	 * Plays when a book is closed (PlayerEditBookEvent) to remove the item
 	 * BookStream from the list, if it's on it. Plays the BookStream's
-	 * onBookClose method after 5 ticks.
+	 * onBookClose method after 20 ticks.
 	 */
 	@EventHandler(ignoreCancelled=true)
 	public void onBookClose(PlayerEditBookEvent e) {
@@ -32,12 +34,11 @@ public class BookListener implements Listener {
 			if (bookStreamMap.containsKey(uuid)) {
 				BookStream stream = bookStreamMap.get(uuid);
 				bookStreamMap.remove(uuid);
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						stream.onBookClose();
-					}
-				}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+
+				ItemStack book = new ItemStack(Material.WRITABLE_BOOK);
+				book.setItemMeta(e.getNewBookMeta());
+				stream.setBookData(book);
+				stream.onBookClose();
 			}
 		}
 	}

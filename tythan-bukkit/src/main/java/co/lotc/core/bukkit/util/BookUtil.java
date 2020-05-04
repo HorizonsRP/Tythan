@@ -46,6 +46,8 @@ public class BookUtil {
 	 */
 	public static boolean openBook(ItemStack i, Player p) {
 		if (!initialised) return false;
+		InventoryUtil.addOrDropItem(p, i);
+		/* Temporary bypass since the NMS for sendPacket() doesn't work atm.
 		ItemStack held = p.getInventory().getItemInMainHand();
 		try {
 			p.getInventory().setItemInMainHand(i);
@@ -54,7 +56,7 @@ public class BookUtil {
 			e.printStackTrace();
 			initialised = false;
 		}
-		p.getInventory().setItemInMainHand(held);
+		p.getInventory().setItemInMainHand(held);*/
 		return initialised;
 	}
 
