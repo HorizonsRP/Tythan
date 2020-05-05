@@ -65,7 +65,7 @@ public class BookListener implements Listener {
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		if (bookStreamMap.containsKey(e.getPlayer().getUniqueId())) {
-			e.getPlayer().sendMessage();
+			e.getPlayer().sendMessage("You have a book to edit!");
 			e.setCancelled(true);
 		}
 	}
