@@ -1,17 +1,10 @@
-package co.lotc.core.bukkit.convo;
+package co.lotc.core.bukkit.book;
 
-import co.lotc.core.bukkit.util.BookUtil;
 import co.lotc.core.bukkit.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public abstract class BookStream {
 

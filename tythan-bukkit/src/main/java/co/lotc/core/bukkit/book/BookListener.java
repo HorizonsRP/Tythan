@@ -1,6 +1,5 @@
-package co.lotc.core.bukkit.convo;
+package co.lotc.core.bukkit.book;
 
-import co.lotc.core.bukkit.TythanBukkit;
 import co.lotc.core.bukkit.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;

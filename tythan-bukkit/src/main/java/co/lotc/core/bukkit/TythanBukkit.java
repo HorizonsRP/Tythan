@@ -1,6 +1,6 @@
 package co.lotc.core.bukkit;
 
-import co.lotc.core.bukkit.convo.BookListener;
+import co.lotc.core.bukkit.book.BookListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
