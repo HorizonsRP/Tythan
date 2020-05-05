@@ -78,6 +78,7 @@ public abstract class BookStream {
 	public void abort() {
 		BookListener.returnItem(holder);
 		activeStreams.remove(holder.getUniqueId());
+		holder.sendMessage("Book entry cancelled!");
 	}
 
 	/**
