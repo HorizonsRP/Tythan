@@ -3,7 +3,7 @@ package co.lotc.core.bukkit.util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class NMSUtils {
+public class NMSUtil {
 	public static void sendPacket(Player player, Object packet) {
 		try {
 			Object handle = player.getClass().getMethod("getHandle").invoke(player);
