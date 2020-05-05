@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -58,6 +59,14 @@ public class BookListener implements Listener {
 				stream.setBookData(book);
 				stream.onBookClose();
 			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent e) {
+		if (bookStreamMap.containsKey(e.getPlayer().getUniqueId())) {
+			e.getPlayer().sendMessage();
+			e.setCancelled(true);
 		}
 	}
 
