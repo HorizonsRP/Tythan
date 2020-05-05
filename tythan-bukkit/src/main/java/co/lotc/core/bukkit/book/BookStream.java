@@ -5,12 +5,22 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class BookStream {
 
 	protected static final String BOOK_TAG = "tythan-book-stream";
 
 	private ItemStack book;
+
+	public BookStream(ItemStack book, String title) {
+		ItemMeta meta = book.getItemMeta();
+		meta.setDisplayName(title);
+
+		ItemStack clone = book.clone();
+		clone.setItemMeta(meta);
+		setBookData(clone);
+	}
 
 	/**
 	 * Return the current book as an item.
@@ -44,9 +54,14 @@ public abstract class BookStream {
 	 * @param player The player to open the book.
 	 */
 	public void open(Player player) {
+		int slot = player.getInventory().getHeldItemSlot();
+		ItemStack oldItem = player.getInventory().getItem(slot);
+
 		ItemUtil.setCustomTag(this.book, BOOK_TAG, player.getUniqueId().toString());
-		BookListener.addMap(player, this);
-		BookUtil.openBook(book, player);
+		BookListener.addStreamMap(player, this);
+		BookListener.addItemMap(player, slot, oldItem);
+
+		player.getInventory().setItem(slot, book);
 	}
 
 	/**
