@@ -36,33 +36,57 @@ public class BookListener implements Listener {
 	}
 
 	/**
+	 * Return the item for the given player if it's on the stored list.
+	 * @param player The player in question.
+	 */
+	protected static void returnItem(Player player) {
+		UUID uuid = player.getUniqueId();
+		if (oldItemMap.containsKey(uuid) && oldSlotMap.containsKey(uuid)) {
+			player.getInventory().setItem(oldSlotMap.get(uuid), oldItemMap.get(uuid));
+			oldSlotMap.remove(uuid);
+			oldItemMap.remove(uuid);
+		}
+	}
+
+	/**
 	 * Plays when a book is closed (PlayerEditBookEvent) to remove the item
 	 * BookStream from the list, if it's on it. Plays the BookStream's
-	 * onBookClose method after 20 ticks.
+	 * onBookClose method, and returns the item after 5 ticks.
 	 */
 	@EventHandler(ignoreCancelled=true)
 	public void onBookClose(PlayerEditBookEvent e) {
 		if (ItemUtil.hasCustomTag(e.getPreviousBookMeta(), BookStream.BOOK_TAG)) {
-			UUID uuid = e.getPlayer().getUniqueId();
-			if (bookStreamMap.containsKey(uuid)) {
-				e.setCancelled(true);
 
+			// CANCEL
+			if (e.getNewBookMeta().getTitle() != null && e.getNewBookMeta().getTitle().equalsIgnoreCase("cancel")) {
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						e.getPlayer().getInventory().setItem(oldSlotMap.get(uuid), oldItemMap.get(uuid));
-						oldSlotMap.remove(uuid);
-						oldItemMap.remove(uuid);
+						BookStream.getFor(e.getPlayer()).abort();
 					}
 				}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
 
-				BookStream stream = bookStreamMap.get(uuid);
-				bookStreamMap.remove(uuid);
+			// SAVE AND RETURN
+			} else {
+				UUID uuid = e.getPlayer().getUniqueId();
+				if (bookStreamMap.containsKey(uuid)) {
+					BookStream stream = bookStreamMap.get(uuid);
 
-				ItemStack book = new ItemStack(Material.WRITABLE_BOOK);
-				book.setItemMeta(e.getNewBookMeta());
-				stream.setBookData(book);
-				stream.onBookClose();
+					ItemStack book = new ItemStack(Material.WRITABLE_BOOK);
+					book.setItemMeta(e.getNewBookMeta());
+					stream.setBookData(book);
+
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							returnItem(e.getPlayer());
+						}
+					}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+
+					e.setCancelled(true);
+					bookStreamMap.remove(uuid);
+					stream.onBookClose();
+				}
 			}
 		}
 	}

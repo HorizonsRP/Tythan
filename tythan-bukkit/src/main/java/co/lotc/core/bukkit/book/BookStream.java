@@ -7,19 +7,27 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public abstract class BookStream {
 
 	protected static final String BOOK_TAG = "tythan-book-stream";
+	private static Map<UUID, BookStream> activeStreams = new HashMap<>();
 
 	private ItemStack book;
+	private Player holder;
 
-	public BookStream(ItemStack book, String title) {
+	public BookStream(Player holder, ItemStack book, String title) {
+		this.holder = holder;
 		ItemMeta meta = book.getItemMeta();
 		meta.setDisplayName(title);
 
 		ItemStack clone = book.clone();
 		clone.setItemMeta(meta);
 		setBookData(clone);
+		activeStreams.put(holder.getUniqueId(), this);
 	}
 
 	/**
@@ -41,7 +49,7 @@ public abstract class BookStream {
 
 	/**
 	 * Pass through a book to use as the base for this interaction.
-	 * @param book Must be a Material.WRITABLE_BOOK.
+	 * @param book Must be of Material.WRITABLE_BOOK.
 	 */
 	public void setBookData(ItemStack book) {
 		if (book.getType().equals(Material.WRITABLE_BOOK)) {
@@ -50,8 +58,8 @@ public abstract class BookStream {
 	}
 
 	/**
-	 * Opens the book for the given player and registers them to the BookListener.
-	 * @param player The player to open the book.
+	 * Swaps the book for the given player and registers them to the BookListener.
+	 * @param player The player to swap the book for.
 	 */
 	public void open(Player player) {
 		int slot = player.getInventory().getHeldItemSlot();
@@ -62,6 +70,32 @@ public abstract class BookStream {
 		BookListener.addItemMap(player, slot, oldItem);
 
 		player.getInventory().setItem(slot, book);
+	}
+
+	/**
+	 * Returns the item to the player without making any edits.
+	 */
+	public void abort() {
+		BookListener.returnItem(holder);
+		activeStreams.remove(holder.getUniqueId());
+	}
+
+	/**
+	 * Aborts all currently active book streams.
+	 */
+	public static void abortAll() {
+		for (BookStream stream : activeStreams.values()) {
+			stream.abort();
+		}
+	}
+
+	/**
+	 * Returns the BookStream for the given player.
+	 * @param player The player in question.
+	 * @return The relevant BookStream, otherwise null.
+	 */
+	public static BookStream getFor(Player player) {
+		return activeStreams.get(player.getUniqueId());
 	}
 
 	/**

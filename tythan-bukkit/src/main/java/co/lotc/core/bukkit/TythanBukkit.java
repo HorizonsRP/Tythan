@@ -1,6 +1,7 @@
 package co.lotc.core.bukkit;
 
 import co.lotc.core.bukkit.book.BookListener;
+import co.lotc.core.bukkit.book.BookStream;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
@@ -65,7 +66,7 @@ public class TythanBukkit extends JavaPlugin implements Tythan {
 	
 	@Override
 	public void onDisable(){
-
+		BookStream.abortAll();
 	}
 
 	@Override
