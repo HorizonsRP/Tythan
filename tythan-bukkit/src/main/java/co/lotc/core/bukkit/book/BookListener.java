@@ -46,6 +46,7 @@ public class BookListener implements Listener {
 			player.getInventory().setItem(oldSlotMap.get(uuid), oldItemMap.get(uuid));
 			oldSlotMap.remove(uuid);
 			oldItemMap.remove(uuid);
+			bookStreamMap.remove(uuid);
 		}
 	}
 
