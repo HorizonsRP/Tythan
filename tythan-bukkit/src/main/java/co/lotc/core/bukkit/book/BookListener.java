@@ -3,9 +3,14 @@ package co.lotc.core.bukkit.book;
 import co.lotc.core.bukkit.TythanBukkit;
 import co.lotc.core.bukkit.util.ItemUtil;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -64,10 +69,37 @@ public class BookListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
-		if (bookStreamMap.containsKey(e.getPlayer().getUniqueId())) {
-			e.getPlayer().sendMessage("You have a book to edit!");
+		if (checkIfPlayer(e.getPlayer())) {
 			e.setCancelled(true);
 		}
 	}
 
+	@EventHandler
+	public void onPlayerDrop(PlayerDropItemEvent e) {
+		if (checkIfPlayer(e.getPlayer())) {
+			e.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onInventoryOpen(InventoryOpenEvent e) {
+		if (checkIfPlayer(e.getPlayer())) {
+			e.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent e) {
+		if (checkIfPlayer(e.getWhoClicked())) {
+			e.setCancelled(true);
+		}
+	}
+
+	private boolean checkIfPlayer(HumanEntity p) {
+		if (bookStreamMap.containsKey(p.getUniqueId())) {
+			p.sendMessage("You have a book to edit!");
+			return true;
+		}
+		return false;
+	}
 }
