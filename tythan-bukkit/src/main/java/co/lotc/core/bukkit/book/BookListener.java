@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -116,6 +117,14 @@ public class BookListener implements Listener {
 	public void onInventoryClick(InventoryClickEvent e) {
 		if (checkIfPlayer(e.getWhoClicked())) {
 			e.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		BookStream stream = BookStream.getFor(e.getPlayer());
+		if (stream != null) {
+			stream.abort();
 		}
 	}
 
