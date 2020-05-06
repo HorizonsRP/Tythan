@@ -6,14 +6,14 @@ import org.bukkit.inventory.meta.BookMeta;
 
 public class BookUtil {
 
-	public String getPagesAsString(ItemStack book) {
+	public static String getPagesAsString(ItemStack book) {
 		if (book.getItemMeta() instanceof BookMeta) {
 			return getPagesAsString((BookMeta) book.getItemMeta());
 		}
 		return null;
 	}
 
-	public String getPagesAsString(BookMeta meta) {
+	public static String getPagesAsString(BookMeta meta) {
 		StringBuilder combinedDesc = new StringBuilder();
 		for (String str : meta.getPages()) {
 			if (combinedDesc.length() > 0) {
