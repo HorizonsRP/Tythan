@@ -51,7 +51,7 @@ public class BookUtil {
 	 * Get the pages of a given BookMeta as one long string including
 	 * line breaks and chat colors.
 	 * @param meta The BookMeta to extract from.
-	 * @return
+	 * @return A singular string with colour codes and line breaks included.
 	 */
 	public static String getPagesAsString(BookMeta meta) {
 		StringBuilder combinedDesc = new StringBuilder();
