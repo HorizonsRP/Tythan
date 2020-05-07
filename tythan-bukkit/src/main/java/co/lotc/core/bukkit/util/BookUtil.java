@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import java.util.List;
+
 public class BookUtil {
 
 	/**
@@ -29,7 +31,18 @@ public class BookUtil {
 	 * @return A list of words split by spaces and line breaks.
 	 */
 	public static String[] getPagesAsArray(BookMeta meta) {
-		String desc = getPagesAsString(meta);
+		return getPagesAsArray(meta.getPages());
+	}
+
+	/**
+	 * Re-format the list of pages as per BookMeta standards split into each
+	 * word by spaces and line breaks. Line breaks will appear as their own word
+	 * (\n) in this array for easy parsing.
+	 * @param pages The pages of a book as per BookMeta standards.
+	 * @return A list of words split by spaces and line breaks.
+	 */
+	public static String[] getPagesAsArray(List<String> pages) {
+		String desc = getPagesAsString(pages);
 		return desc.split(" ");
 	}
 
@@ -54,24 +67,35 @@ public class BookUtil {
 	 * @return A singular string with colour codes and line breaks included.
 	 */
 	public static String getPagesAsString(BookMeta meta) {
+		return getPagesAsString(meta.getPages());
+	}
+
+	/**
+	 * Return the list of pages as one long string as per BookMeta
+	 * standards, including line breaks and chat colors still present.
+	 * @param pages The pages as per BookMeta standards.
+	 * @return A singular string representing the pages put together.
+	 */
+	public static String getPagesAsString(List<String> pages) {
 		StringBuilder combinedDesc = new StringBuilder();
-		for (String str : meta.getPages()) {
-			if (combinedDesc.length() > 0) {
-				combinedDesc.append(" ");
-			}
-			if (str.contains("\n")) {
-				String[] lineBreaks = str.split("\\R", -1);
-				for (int i = 0; i < lineBreaks.length; i++) {
-					combinedDesc.append(lineBreaks[i]);
-					if (i < lineBreaks.length-1) {
-						combinedDesc.append(" \n ");
-					}
+		if (pages != null) {
+			for (String str : pages) {
+				if (combinedDesc.length() > 0) {
+					combinedDesc.append(" ");
 				}
-			} else {
-				combinedDesc.append(str);
+				if (str.contains("\n")) {
+					String[] lineBreaks = str.split("\\R", -1);
+					for (int i = 0; i < lineBreaks.length; i++) {
+						combinedDesc.append(lineBreaks[i]);
+						if (i < lineBreaks.length - 1) {
+							combinedDesc.append(" \n ");
+						}
+					}
+				} else {
+					combinedDesc.append(str);
+				}
 			}
 		}
-
 		return combinedDesc.toString();
 	}
 
