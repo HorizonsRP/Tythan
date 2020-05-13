@@ -1,6 +1,8 @@
 package co.lotc.core.bukkit.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.utility.MinecraftReflection;
@@ -8,12 +10,31 @@ import com.google.common.base.Function;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-public final class ItemArg {
+import java.util.ArrayList;
+import java.util.List;
+
+public final class DefaultArgs {
 	private static final BrigadierProvider provider = BrigadierProvider.get();
 
-	private ItemArg () {}
-	
-	public static void buildMaterialParameter(){
+	private DefaultArgs() {}
+
+	public static void buildWorldParameter() {
+		Commands.defineArgumentType(World.class)
+				.defaultName("World")
+				.completer((s,$) -> getWorldStringList())
+				.mapperWithSender((sender, world) -> Bukkit.getWorld(world))
+				.register();
+	}
+
+	private static List<String> getWorldStringList() {
+		List<String> output = new ArrayList<>();
+		for (World world : Bukkit.getWorlds()) {
+			output.add(world.getName());
+		}
+		return output;
+	}
+
+	public static void buildMaterialParameter() {
 		Commands.defineArgumentType(Material.class)
 		.brigadierType(provider.argumentItemStack())
 		.mapper( parse.andThen(ItemStack::getType) )
@@ -22,7 +43,7 @@ public final class ItemArg {
 		.register();
 	}
 	
-	public static void buildItemStackParameter(){
+	public static void buildItemStackParameter() {
 		Commands.defineArgumentType(ItemStack.class)
 			.brigadierType(provider.argumentItemStack())
 			.mapper(parse)
