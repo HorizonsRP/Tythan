@@ -78,14 +78,9 @@ public class BookListener implements Listener {
 					ItemStack book = new ItemStack(Material.WRITABLE_BOOK);
 					book.setItemMeta(e.getNewBookMeta());
 					stream.setBookData(book);
+					stream.onBookClose();
 
 					returnItem(e.getPlayer());
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							stream.onBookClose();
-						}
-					}.runTaskLater(TythanBukkit.get(), 5);
 				}
 			}
 		}
