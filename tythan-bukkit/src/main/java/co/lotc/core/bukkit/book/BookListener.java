@@ -72,15 +72,19 @@ public class BookListener implements Listener {
 			} else {
 				UUID uuid = e.getPlayer().getUniqueId();
 				BookStream stream = bookStreamMap.get(uuid);
-
 				if (stream != null) {
 					e.setCancelled(true);
 					ItemStack book = new ItemStack(Material.WRITABLE_BOOK);
 					book.setItemMeta(e.getNewBookMeta());
 					stream.setBookData(book);
-					stream.onBookClose();
 
-					returnItem(e.getPlayer());
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							returnItem(e.getPlayer());
+						}
+					}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+					stream.onBookClose();
 				}
 			}
 		}
