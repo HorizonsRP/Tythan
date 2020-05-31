@@ -80,7 +80,12 @@ public class BookListener implements Listener {
 					stream.setBookData(book);
 
 					returnItem(e.getPlayer());
-					stream.onBookClose();
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							stream.onBookClose();
+						}
+					}.runTaskLater(TythanBukkit.get(), 5);
 				}
 			}
 		}
