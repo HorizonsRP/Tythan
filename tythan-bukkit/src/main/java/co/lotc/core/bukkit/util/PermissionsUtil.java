@@ -68,7 +68,7 @@ public class PermissionsUtil {
 		return output;
 	}
 
-	public int getTotalPermission(UUID player, String permission) {
+	public static int getTotalPermission(UUID player, String permission) {
 		int total = 0;
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
