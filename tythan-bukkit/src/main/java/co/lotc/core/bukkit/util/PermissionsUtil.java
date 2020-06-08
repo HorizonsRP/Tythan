@@ -5,11 +5,11 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PermissionsUtil {
 
@@ -68,29 +68,30 @@ public class PermissionsUtil {
 	}
 
 	public static int getTotalPermission(UUID player, String permission) {
-		int total = 0;
+		AtomicInteger total = new AtomicInteger();
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
 			LuckPerms api = provider.getProvider();
 			CompletableFuture<User> future = api.getUserManager().loadUser(player);
-			User user = future.join();
-			if (user != null) {
-				for (Node node : user.getNodes()) {
-					String key = node.getKey();
-					if (key.startsWith(permission)) {
-						String[] split = key.split("\\.");
-						try {
-							int value = Integer.parseInt(split[split.length - 1]);
-							total += value;
-						} catch (Exception e) {
-							TythanBukkit.get().getLogger().warning("Node failed to parse for total permission: " + key);
-							e.printStackTrace();
+			future.thenAccept(user -> {
+				if (user != null) {
+					for (Node node : user.getNodes()) {
+						String key = node.getKey();
+						if (key.startsWith(permission)) {
+							String[] split = key.split("\\.");
+							try {
+								int value = Integer.parseInt(split[split.length - 1]);
+								total.addAndGet(value);
+							} catch (Exception e) {
+								TythanBukkit.get().getLogger().warning("Node failed to parse for total permission: " + key);
+								e.printStackTrace();
+							}
 						}
 					}
 				}
-			}
+			});
 		}
-		return total;
+		return total.get();
 	}
 
 }
