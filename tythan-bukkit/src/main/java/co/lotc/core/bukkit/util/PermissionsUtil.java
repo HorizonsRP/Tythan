@@ -39,8 +39,7 @@ public class PermissionsUtil {
 		if (provider != null) {
 			LuckPerms api = provider.getProvider();
 			CompletableFuture<User> future = api.getUserManager().loadUser(player);
-			future.complete(api.getUserManager().getUser(player));
-			User user = api.getUserManager().getUser(player);
+			User user = future.join();
 			if (user != null) {
 				for (Node node : user.getDistinctNodes()) {
 					String key = node.getKey();
@@ -74,8 +73,7 @@ public class PermissionsUtil {
 		if (provider != null) {
 			LuckPerms api = provider.getProvider();
 			CompletableFuture<User> future = api.getUserManager().loadUser(player);
-			future.complete(api.getUserManager().getUser(player));
-			User user = api.getUserManager().getUser(player);
+			User user = future.join();
 			if (user != null) {
 				for (Node node : user.getNodes()) {
 					String key = node.getKey();
