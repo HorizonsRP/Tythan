@@ -9,6 +9,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PermissionsUtil {
@@ -67,8 +68,8 @@ public class PermissionsUtil {
 		return output;
 	}
 
-	public static AtomicInteger getTotalPermission(UUID player, String permission) {
-		AtomicInteger total = new AtomicInteger();
+	public static AtomicBoolean getTotalPermission(AtomicInteger base, UUID player, String permission) {
+		AtomicBoolean finished = new AtomicBoolean(false);
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
 			LuckPerms api = provider.getProvider();
@@ -81,7 +82,7 @@ public class PermissionsUtil {
 							String[] split = key.split("\\.");
 							try {
 								int value = Integer.parseInt(split[split.length - 1]);
-								total.addAndGet(value);
+								base.addAndGet(value);
 							} catch (Exception e) {
 								TythanBukkit.get().getLogger().warning("Node failed to parse for total permission: " + key);
 								e.printStackTrace();
@@ -89,9 +90,10 @@ public class PermissionsUtil {
 						}
 					}
 				}
+				finished.set(true);
 			});
 		}
-		return total;
+		return finished;
 	}
 
 }
