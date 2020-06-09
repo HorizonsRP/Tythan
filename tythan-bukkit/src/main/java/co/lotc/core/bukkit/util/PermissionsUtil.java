@@ -67,7 +67,7 @@ public class PermissionsUtil {
 		return output;
 	}
 
-	public static int getTotalPermission(UUID player, String permission) {
+	public static AtomicInteger getTotalPermission(UUID player, String permission) {
 		AtomicInteger total = new AtomicInteger();
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
@@ -75,7 +75,7 @@ public class PermissionsUtil {
 			CompletableFuture<User> future = api.getUserManager().loadUser(player);
 			future.thenAccept(user -> {
 				if (user != null) {
-					for (Node node : user.getNodes()) {
+					for (Node node : user.data().toCollection()) {
 						String key = node.getKey();
 						if (key.startsWith(permission)) {
 							String[] split = key.split("\\.");
@@ -91,7 +91,7 @@ public class PermissionsUtil {
 				}
 			});
 		}
-		return total.get();
+		return total;
 	}
 
 }
