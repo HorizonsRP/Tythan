@@ -15,6 +15,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PermissionsUtil {
 
 	/**
+	 * @deprecated Only returns the given defaultAmount. Please update to using AtomicInteger.
+	 */
+	public static int getMaxPermission(UUID player, String permission, int defaultAmount) {
+		return defaultAmount;
+	}
+
+	/**
+	 * @deprecated Only returns the given defaultAmount. Please update to using AtomicInteger.
+	 */
+	public static int getMinPermission(UUID player, String permission, int defaultAmount) {
+		return defaultAmount;
+	}
+
+	/**
 	 * Gets the highest numerical representation for a given permission node. permission.*, *, and permission.unlimited grant max value.
 	 * @param base An AtomicInteger that is used as the default number and the integer to check when complete.
 	 * @param player UUID of the player in question.
