@@ -61,7 +61,7 @@ public class PermissionsUtil {
 					for (Node node : user.data().toCollection()) {
 						String key = node.getKey();
 						if (key.startsWith(permission)) {
-							String[] split = key.split("\\.");
+							String[] split = key.replace(".", " ").split(" ");
 							try {
 								String data = split[split.length - 1];
 								if (data.equalsIgnoreCase("*") || data.equalsIgnoreCase("unlimited")) {
@@ -104,7 +104,7 @@ public class PermissionsUtil {
 					for (Node node : user.data().toCollection()) {
 						String key = node.getKey();
 						if (key.startsWith(permission)) {
-							String[] split = key.split("\\.");
+							String[] split = key.replace(".", " ").split(" ");
 							try {
 								String data = split[split.length - 1];
 								if (data.equalsIgnoreCase("*") || data.equalsIgnoreCase("unlimited")) {
