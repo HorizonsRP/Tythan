@@ -4,9 +4,11 @@ import co.lotc.core.bukkit.TythanBukkit;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
+import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -101,9 +103,9 @@ public class PermissionsUtil {
 			CompletableFuture<User> future = api.getUserManager().loadUser(player);
 			future.thenAccept(user -> {
 				if (user != null) {
-					for (Node node : user.data().toCollection()) {
-						String key = node.getKey();
-						if (key.startsWith(permission)) {
+					Map<String, Boolean> permissionsMap = user.getCachedData().getPermissionData(QueryOptions.defaultContextualOptions()).getPermissionMap();
+					for (String key : permissionsMap.keySet()) {
+						if (key.startsWith(permission) && permissionsMap.get(key)) {
 							String[] split = key.replace(".", " ").split(" ");
 							try {
 								String data = split[split.length - 1];
