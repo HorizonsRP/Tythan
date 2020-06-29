@@ -58,6 +58,8 @@ public class TythanBukkit extends JavaPlugin implements Tythan {
 		DefaultArgs.buildWorldParameter();
 		DefaultArgs.buildItemStackParameter();
 		DefaultArgs.buildMaterialParameter();
+		DefaultArgs.buildBukkitColorParameter();
+		DefaultArgs.buildBungeeColorParameter();
 	}
 	
 	@Override
