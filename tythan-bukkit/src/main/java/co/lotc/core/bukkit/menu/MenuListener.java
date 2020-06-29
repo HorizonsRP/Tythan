@@ -34,13 +34,12 @@ public class MenuListener implements Listener {
 	//Two possible interactions
 	//a) SINGLE icon/slot affected, propagate a click
 	//b) MULTIPLE slots affected; they all allowed a move
-	
-	@SuppressWarnings("deprecation")
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void handle(InventoryCloseEvent e) {
 		MenuAgent agent = getAgent(e.getInventory(), e.getPlayer());
 		if(agent != null) {
-			CoreLog.debug("Closing Menu with title " + e.getInventory().getTitle() + " for player: " + e.getPlayer().getName());
+			CoreLog.debug("Closing Menu with title " + agent.getMenu().getTitle() + " for player: " + e.getPlayer().getName());
 			agent.getMenu().clearViewer(agent);
 			if(!agent.isNavigating()) {
 				//Session ended. Player either closed inv manually or MenuAgent::close was called.

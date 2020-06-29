@@ -18,12 +18,13 @@ import co.lotc.core.CoreLog;
 import co.lotc.core.bukkit.menu.icon.Icon;
 import lombok.var;
 
-public class Menu implements InventoryHolder{
+public class Menu implements InventoryHolder {
 	private final Map<UUID, MenuAgent> viewers = new LinkedHashMap<>();
 
 	private final Icon[] icons;
 	private final Inventory inventory;
 
+	private String title;
 	private boolean initialized = false;
 	
 	public static Menu fromIcons(String title, List<? extends Icon> icons) {
@@ -37,10 +38,12 @@ public class Menu implements InventoryHolder{
 	Menu(MenuBuilder builder) {
 		icons = builder.icons.toArray(new Icon[builder.size]);
 		
-		if(builder.type == InventoryType.CHEST)
+		if(builder.type == InventoryType.CHEST) {
 			inventory = Bukkit.createInventory(this, builder.size, builder.title);
-		else
+		} else {
 			inventory = Bukkit.createInventory(this, builder.type, builder.title);
+		}
+		this.title = builder.title;
 	}
 	
 	/**
@@ -58,16 +61,13 @@ public class Menu implements InventoryHolder{
 	void init() {
 		if(!initialized) {
 			initialized = true;
-			@SuppressWarnings("deprecation")
-			String title = inventory.getTitle();
 			CoreLog.debug("Initializing menu with title: " + title);
 			updateIconItems();
 		}
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	public String getTitle() {
-		return inventory.getTitle();
+		return title;
 	}
 	
 	public int getSize() {
