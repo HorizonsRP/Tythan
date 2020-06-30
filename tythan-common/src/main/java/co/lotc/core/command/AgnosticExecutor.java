@@ -1,8 +1,6 @@
 package co.lotc.core.command;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,14 +18,14 @@ public class AgnosticExecutor{
 	
 	public boolean onCommand(Sender sender, String label, String[] args) {
 		List<String> listArgs = new ArrayList<>();
-		for (String arg : args) listArgs.add(arg);
+		Collections.addAll(listArgs, args);
 		runCommand(sender, rootCommand, label, listArgs);
 		return true;
 	}
 	
 	public List<String> onTabComplete(Sender sender, String alias, String[] args) {
-		try{List<String> listArgs = new ArrayList<>();
-			for (String arg : args) listArgs.add(arg);
+		try {
+			List<String> listArgs = new ArrayList<>(Arrays.asList(args));
 			return getCompletions(sender, rootCommand, listArgs);
 		} catch(ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();

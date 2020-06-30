@@ -53,7 +53,7 @@ public class AnnotatedCommandParser {
 		boolean firstInvokeFound = false;
 		for(Method m : c.getDeclaredMethods()) {
 			if(m.getParameterCount() > 0 && Modifier.isPublic(m.getModifiers()) && m.getName().equals("invoke") && m.getReturnType() == Void.TYPE) {
-				//This is a invoke method declared in the class, assumed this is what we want for the default invocation of the command
+				//This is an invoke method declared in the class, assumed this is what we want for the default invocation of the command
 				//Due to logic of the ArcheCommandExecutor this still makes the no-argument default a help command
 				if(!firstInvokeFound) {
 					parseCommandMethod(m, template, acb);
