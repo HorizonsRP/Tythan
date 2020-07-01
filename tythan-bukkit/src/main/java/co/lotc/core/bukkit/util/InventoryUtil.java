@@ -462,6 +462,7 @@ public class InventoryUtil {
 					break;
 				case MOVE_TO_OTHER_INVENTORY:
 					//Just cancel this event tbh
+					e.setCancelled(true);
 					handleMoveToOther(result, ev.getRawSlot(), ev.getView());
 					break;
 				case PICKUP_ALL: case PICKUP_HALF:case PICKUP_ONE:
@@ -541,7 +542,8 @@ public class InventoryUtil {
 	private static Method slot_isAllowed = null;
 
 	private static boolean isItemAllowed(int rawSlot, ItemStack is, InventoryView view) {
-		if(is == null || is.getType() == Material.AIR) return true;
+		return true;
+		/*if (is == null || is.getType() == Material.AIR) return true;
 		Object nmsItem = MinecraftReflection.getMinecraftItemStack(is);
 		Object isAllowed = null;
 		try {
@@ -559,7 +561,7 @@ public class InventoryUtil {
 		} catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 			throw new IllegalStateException("Reflection failed. MC probably changed its method handles. This is bad. Call someone", e);
-		}
+		}*/
 	}
 
 	private static void handleMoveToOther(List<MovedItem> result, int raw, InventoryView view) {
