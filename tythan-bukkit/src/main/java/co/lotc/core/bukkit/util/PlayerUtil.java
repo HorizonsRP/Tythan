@@ -44,14 +44,14 @@ public class PlayerUtil {
 
 			if (uuid != null) {
 				checkedUUIDs.put(name, uuid);
-				removeForRefresh(name).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
+				removeUUIDsForRefresh(name).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
 			}
 		}
 
 		return uuid;
 	}
 
-	private static BukkitRunnable removeForRefresh(String name) {
+	private static BukkitRunnable removeUUIDsForRefresh(String name) {
 		return new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -59,7 +59,7 @@ public class PlayerUtil {
 			}
 		};
 	}
-	private static BukkitRunnable removeForRefresh(UUID uuid) {
+	private static BukkitRunnable removeTexturesForRefresh(UUID uuid) {
 		return new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -86,10 +86,50 @@ public class PlayerUtil {
 
 		if (texture != null) {
 			checkedTextures.put(uuid, texture);
-			removeForRefresh(uuid).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
+			removeTexturesForRefresh(uuid).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
 		}
 
 		return texture;
+	}
+
+	/**
+	 * Checks stored Username to UUID maps first, otherwise gets the player from the UUID if
+	 * Bukkit can find it, or as a last resort request the username from Mojang directly.
+	 * Afterwards we run a timer to remove the local data after 5 mins.
+	 * @param uuid UUID of the player you wish to get a proper username from.
+	 * @return The username, if found, otherwise null.
+	 */
+	public static String getPlayerName(UUID uuid) {
+		String name = null;
+		if (checkedUUIDs.containsValue(uuid)) {
+			for (String key : checkedUUIDs.keySet()) {
+				if (checkedUUIDs.get(key).equals(uuid)) {
+					name = key;
+					break;
+				}
+			}
+		}
+
+		if (name == null) {
+			Player p = Bukkit.getPlayer(uuid);
+			if (p != null) {
+				name = p.getName();
+			}
+		}
+
+		if (name == null) {
+			try {
+				name = MojangCommunicator.requestCurrentUsername(uuid);
+			} catch (Exception ignored) {
+			}
+		}
+
+		if (name != null) {
+			checkedUUIDs.put(name, uuid);
+			removeUUIDsForRefresh(name).runTaskLater(TythanBukkit.get(), REFRESH_TIME);
+		}
+
+		return name;
 	}
 
 }
