@@ -87,8 +87,6 @@ public class MenuListener implements Listener {
 			Player p = action.getPlayer();
 			if(!p.isOnline())
 				return;
-			if(p.getOpenInventory() == null)
-				return;
 			if(!(p.getOpenInventory().getTopInventory().getHolder() instanceof Menu) )
 				return;
 			

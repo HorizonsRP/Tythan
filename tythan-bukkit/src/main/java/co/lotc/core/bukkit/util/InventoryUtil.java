@@ -542,8 +542,7 @@ public class InventoryUtil {
 	private static Method slot_isAllowed = null;
 
 	private static boolean isItemAllowed(int rawSlot, ItemStack is, InventoryView view) {
-		return true;
-		/*if (is == null || is.getType() == Material.AIR) return true;
+		if (is == null || is.getType() == Material.AIR) return true;
 		Object nmsItem = MinecraftReflection.getMinecraftItemStack(is);
 		Object isAllowed = null;
 		try {
@@ -561,7 +560,7 @@ public class InventoryUtil {
 		} catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 			throw new IllegalStateException("Reflection failed. MC probably changed its method handles. This is bad. Call someone", e);
-		}*/
+		}
 	}
 
 	private static void handleMoveToOther(List<MovedItem> result, int raw, InventoryView view) {
