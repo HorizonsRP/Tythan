@@ -75,9 +75,16 @@ public final class DefaultArgs {
 	// Color
 	public static void buildBungeeColorParameter() {
 		Commands.defineArgumentType(net.md_5.bungee.api.ChatColor.class)
-				.defaultName("Color")
-				.completer((s,$) -> Arrays.stream(net.md_5.bungee.api.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
-				.mapperWithSender((sender, color) -> net.md_5.bungee.api.ChatColor.of(hexToColor(color)))
+				.defaultName("Color") // TODO Figure out how to grab a list of bungee chat colors post deprecation.
+				.completer((s,$) -> Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
+				.mapperWithSender((sender, color) -> {
+					net.md_5.bungee.api.ChatColor chatColor = net.md_5.bungee.api.ChatColor.of(color);
+					if (chatColor != null) {
+						return chatColor;
+					} else {
+						return net.md_5.bungee.api.ChatColor.of(hexToColor(color));
+					}
+				})
 				.register();
 	}
 
@@ -85,7 +92,14 @@ public final class DefaultArgs {
 		Commands.defineArgumentType(org.bukkit.ChatColor.class)
 				.defaultName("Color")
 				.completer((s,$) -> Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
-				.mapperWithSender((sender, color) -> org.bukkit.ChatColor.valueOf(color))
+				.mapperWithSender((sender, color) -> {
+					if (!color.startsWith("#")) {
+						return org.bukkit.ChatColor.valueOf(color);
+					} else {
+						Color hexColor = hexToColor(color);
+						return null; // TODO Figure out how bukkit ChatColor uses the new hex values.
+					}
+				})
 				.register();
 	}
 
