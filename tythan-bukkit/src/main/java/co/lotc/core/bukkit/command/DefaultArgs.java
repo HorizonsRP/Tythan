@@ -8,11 +8,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class DefaultArgs {
@@ -75,7 +77,7 @@ public final class DefaultArgs {
 		Commands.defineArgumentType(net.md_5.bungee.api.ChatColor.class)
 				.defaultName("Color")
 				.completer((s,$) -> Arrays.stream(net.md_5.bungee.api.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
-				.mapperWithSender((sender, color) -> net.md_5.bungee.api.ChatColor.of(color))
+				.mapperWithSender((sender, color) -> net.md_5.bungee.api.ChatColor.of(hexToColor(color)))
 				.register();
 	}
 
@@ -85,6 +87,19 @@ public final class DefaultArgs {
 				.completer((s,$) -> Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
 				.mapperWithSender((sender, color) -> org.bukkit.ChatColor.valueOf(color))
 				.register();
+	}
+
+	private static final Pattern hexPattern = Pattern.compile("^#([A-Fa-f0-9]{6})$");
+	private static Color hexToColor(String hex) {
+		if (hex != null) {
+			if (!hex.startsWith("#")) {
+				hex = "#" + hex;
+			}
+			if (hexPattern.matcher(hex).matches()) {
+				return Color.decode(hex);
+			}
+		}
+		return null;
 	}
 	
 }
