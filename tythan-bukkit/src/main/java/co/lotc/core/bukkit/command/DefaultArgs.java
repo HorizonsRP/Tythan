@@ -75,19 +75,22 @@ public final class DefaultArgs {
 
 	// Color
 	public static void buildBungeeColorParameter() {
-		Commands.defineArgumentType(ChatColor.class)
-				.defaultName("Color") // TODO Figure out how to grab a list of bungee chat colors post deprecation.
-				.completer((s,$) -> {
+		Commands.defineArgumentType(net.md_5.bungee.api.ChatColor.class)
+				.defaultName("Color")
+				/*.completer((s,$) -> {
 					List<String> values = Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList());
-					values.add("#hex");
+					values.add("hex-code");
 					return values;
-				})
+				}) TODO Figure out how to grab a list of bungee chat colors post deprecation.*/
 				.mapperWithSender((sender, color) -> {
-					ChatColor chatColor = ChatColor.of(color);
-					if (chatColor != null) {
-						return chatColor;
-					} else {
-						return ChatColor.of(hexToColor(color));
+					try {
+						return net.md_5.bungee.api.ChatColor.of(color); // Try to parse through normal chat colors first.
+					} catch (IllegalArgumentException mustBeAHex) {
+						try {
+							return net.md_5.bungee.api.ChatColor.of(hexToColor(color)); // Couldn't parse it as a normal color, how about as hex?
+						} catch (Exception ignore) {
+							return null; // At this point the color cannot be parsed and we return null.
+						}
 					}
 				})
 				.register();
@@ -96,13 +99,16 @@ public final class DefaultArgs {
 	public static void buildBukkitColorParameter() {
 		Commands.defineArgumentType(org.bukkit.ChatColor.class)
 				.defaultName("Color")
-				.completer((s,$) -> Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
+				//.completer((s,$) -> Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
 				.mapperWithSender((sender, color) -> {
-					if (!color.startsWith("#")) {
-						return org.bukkit.ChatColor.valueOf(color);
-					} else {
-						Color hexColor = hexToColor(color);
-						return null; // TODO Figure out how bukkit ChatColor uses the new hex values.
+					try {
+						return org.bukkit.ChatColor.valueOf(color); // Try to parse through normal chat colors first.
+					} catch (IllegalArgumentException mustBeAHex) {
+						//try {
+						//	return org.bukkit.ChatColor.valueOf(hexToColor(color)); // Couldn't parse it as a normal color, how about as hex?
+						//} catch (Exception ignore) {
+							return null; // At this point the color cannot be parsed and we return null.
+						//} TODO Figure out how bukkit ChatColor uses the new hex values.
 					}
 				})
 				.register();
