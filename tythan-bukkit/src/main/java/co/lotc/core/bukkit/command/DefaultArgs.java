@@ -3,6 +3,7 @@ package co.lotc.core.bukkit.command;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -74,15 +75,19 @@ public final class DefaultArgs {
 
 	// Color
 	public static void buildBungeeColorParameter() {
-		Commands.defineArgumentType(net.md_5.bungee.api.ChatColor.class)
+		Commands.defineArgumentType(ChatColor.class)
 				.defaultName("Color") // TODO Figure out how to grab a list of bungee chat colors post deprecation.
-				.completer((s,$) -> Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList()))
+				.completer((s,$) -> {
+					List<String> values = Arrays.stream(org.bukkit.ChatColor.values()).map(object -> Objects.toString(object, null)).collect(Collectors.toList());
+					values.add("#hex");
+					return values;
+				})
 				.mapperWithSender((sender, color) -> {
-					net.md_5.bungee.api.ChatColor chatColor = net.md_5.bungee.api.ChatColor.of(color);
+					ChatColor chatColor = ChatColor.of(color);
 					if (chatColor != null) {
 						return chatColor;
 					} else {
-						return net.md_5.bungee.api.ChatColor.of(hexToColor(color));
+						return ChatColor.of(hexToColor(color));
 					}
 				})
 				.register();
