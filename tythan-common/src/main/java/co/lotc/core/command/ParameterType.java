@@ -11,8 +11,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import org.apache.commons.lang.Validate;
-
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import co.lotc.core.CoreLog;
@@ -66,13 +64,11 @@ public class ParameterType<T> {
 		if(forClass == Double.class) return false;
 		if(forClass == String.class) return false;
 		if(forClass == Boolean.class) return false;
-		if(forClass == String.class) return false;
 		if(forClass == Sender.class) return false;
 		if(forClass == String[].class) return false;
 		if(forClass == Instant.class) return false;
 		if(forClass == Duration.class) return false;
-		if(forClass == Timestamp.class) return false;
-		return true;
+		return forClass != Timestamp.class;
 	}
 	
 	public Class<?> getTargetType(){
@@ -80,8 +76,17 @@ public class ParameterType<T> {
 	}
 	
 	public final void register() {
-		Validate.notNull(forClass, "There is no class specified for this argument type");
-		Validate.isTrue(isClassValid(), "The class to specify as an argument type was already handled");
+		{
+			String message = null;
+			if (forClass == null) {
+				message = "There is no class specified for this argument type";
+			} else if (!isClassValid()) {
+				message = "The class to specify as an argument type was already handled";
+			}
+			if (message != null) {
+				throw new IllegalArgumentException(message);
+			}
+		}
 
 		@SuppressWarnings("unchecked") //This is safe because only type T can be linked to Class<T> which is what the key was
 		var existing = (ParameterType<T>) customTypes.get(forClass);
