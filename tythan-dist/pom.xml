@@ -2,34 +2,33 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>tythan-dist</artifactId>
+	<packaging>pom</packaging>
 
-  <artifactId>tythan-dist</artifactId>
-  <packaging>pom</packaging>
+	<parent>
+		<groupId>co.lotc</groupId>
+		<artifactId>tythan</artifactId>
+		<version>${revision}</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
-  <parent>
-    <groupId>co.lotc</groupId>
-    <artifactId>tythan</artifactId>
-    <version>${revision}</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+	<properties>
+		<project.build.sourceEncodeing>UTF-8</project.build.sourceEncodeing>
+	</properties>
 
-  <properties>
-    <project.build.sourceEncodeing>UTF-8</project.build.sourceEncodeing>
-  </properties>
-
-  <dependencies>
-	  <dependency>
-		  <groupId>co.lotc</groupId>
-		  <artifactId>tythan-bungee</artifactId>
-		  <version>${project.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>co.lotc</groupId>
-		  <artifactId>tythan-bukkit</artifactId>
-		  <version>${project.version}</version>
-	  </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>co.lotc</groupId>
+			<artifactId>tythan-bungee</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>co.lotc</groupId>
+		    <artifactId>tythan-bukkit</artifactId>
+		    <version>${project.version}</version>
+	    </dependency>
+    </dependencies>
 
 
 	<build>
@@ -38,7 +37,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>Tythan</finalName>
+                    <finalName>Tythan-${revision}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
 				<executions>
@@ -57,6 +56,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-</build>
-
+	</build>
 </project>

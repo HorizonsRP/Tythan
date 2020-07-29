@@ -14,9 +14,8 @@ public class ParseUtil {
 		StringBuilder finalString = new StringBuilder();
 		for (char c : rawString.toCharArray()) {
 			if (gettingHex) {
-				if (hexString.length() < 6) {
-					hexString.append(c);
-				} else {
+				hexString.append(c);
+				if (hexString.length() == 6) {
 					Color color = ColorUtil.hexToColor(hexString.toString());
 					if (color != null) {
 						finalString.append(ChatColor.of(color));
