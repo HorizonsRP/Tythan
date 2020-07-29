@@ -3,9 +3,12 @@ package co.lotc.core.util;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 
+import java.awt.*;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import co.lotc.core.Tythan;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import static net.md_5.bungee.api.ChatColor.*;
 
@@ -81,6 +84,19 @@ public final class MessageUtil {
 	
 	public static BaseComponent ArcheHelpButton(String topic) {
 		return CommandButton(topic, "/archehelp " + topic, "Click for help");
+	}
+
+	private static final Pattern hexPattern = Pattern.compile("^#([A-Fa-f0-9]{6})$");
+	public static Color hexToColor(String hex) {
+		if (hex != null) {
+			if (!hex.startsWith("#")) {
+				hex = "#" + hex;
+			}
+			if (hexPattern.matcher(hex).matches()) {
+				return Color.decode(hex);
+			}
+		}
+		return null;
 	}
 
 	public static void addNewlines(BaseComponent x) {

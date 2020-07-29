@@ -1,5 +1,6 @@
 package co.lotc.core.bukkit.command;
 
+import co.lotc.core.util.MessageUtil;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -87,7 +88,7 @@ public final class DefaultArgs {
 						return net.md_5.bungee.api.ChatColor.of(color); // Try to parse through normal chat colors first.
 					} catch (IllegalArgumentException mustBeAHex) {
 						try {
-							return net.md_5.bungee.api.ChatColor.of(hexToColor(color)); // Couldn't parse it as a normal color, how about as hex?
+							return net.md_5.bungee.api.ChatColor.of(MessageUtil.hexToColor(color)); // Couldn't parse it as a normal color, how about as hex?
 						} catch (Exception ignore) {
 							return null; // At this point the color cannot be parsed and we return null.
 						}
@@ -112,19 +113,6 @@ public final class DefaultArgs {
 					}
 				})
 				.register();
-	}
-
-	private static final Pattern hexPattern = Pattern.compile("^#([A-Fa-f0-9]{6})$");
-	private static Color hexToColor(String hex) {
-		if (hex != null) {
-			if (!hex.startsWith("#")) {
-				hex = "#" + hex;
-			}
-			if (hexPattern.matcher(hex).matches()) {
-				return Color.decode(hex);
-			}
-		}
-		return null;
 	}
 	
 }
