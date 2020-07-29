@@ -3,7 +3,7 @@ package co.lotc.core.bukkit.util;
 import co.lotc.core.util.MessageUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class ParseUtil {
+public class ColorUtil {
 
 	public static String parseWithHexColors(String rawString, char colorKey) {
 		boolean gettingColor = false;
