@@ -5,7 +5,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class ParseUtil {
 
-	public static String parseWithHexColors(String rawString, char colorKey) {
+	public static String parseWithHexColors(char colorKey, String rawString) {
 		boolean gettingColor = false;
 		boolean gettingHex = false;
 		StringBuilder hexString = new StringBuilder();
