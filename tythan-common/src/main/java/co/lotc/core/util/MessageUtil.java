@@ -86,19 +86,6 @@ public final class MessageUtil {
 		return CommandButton(topic, "/archehelp " + topic, "Click for help");
 	}
 
-	private static final Pattern hexPattern = Pattern.compile("^#([A-Fa-f0-9]{6})$");
-	public static Color hexToColor(String hex) {
-		if (hex != null) {
-			if (!hex.startsWith("#")) {
-				hex = "#" + hex;
-			}
-			if (hexPattern.matcher(hex).matches()) {
-				return Color.decode(hex);
-			}
-		}
-		return null;
-	}
-
 	public static void addNewlines(BaseComponent x) {
 		breakUp(x, 0, null);
 	}

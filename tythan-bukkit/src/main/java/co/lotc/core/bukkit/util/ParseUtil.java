@@ -1,9 +1,9 @@
 package co.lotc.core.bukkit.util;
 
-import co.lotc.core.util.MessageUtil;
+import co.lotc.core.util.ColorUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class ColorUtil {
+public class ParseUtil {
 
 	public static String parseWithHexColors(String rawString, char colorKey) {
 		boolean gettingColor = false;
@@ -17,7 +17,7 @@ public class ColorUtil {
 				} else {
 					gettingColor = false;
 					gettingHex = false;
-					finalString.append(net.md_5.bungee.api.ChatColor.of(MessageUtil.hexToColor(hexString.toString())));
+					finalString.append(net.md_5.bungee.api.ChatColor.of(ColorUtil.hexToColor(hexString.toString())));
 					hexString = new StringBuilder();
 				}
 			} else if (gettingColor && c == '#') {
