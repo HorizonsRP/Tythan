@@ -402,7 +402,7 @@ public class InventoryUtil {
 					raw = ev.getRawSlot();
 					is = ev.getView().getItem(hotbarRawSlot);
 
-					if(raw != hotbarRawSlot && isItemAllowed(raw, is, ev.getView())) {
+					if(raw != hotbarRawSlot && isItemAllowed(raw, is, (CraftInventoryView) ev.getView())) {
 						//Enchanting table / horse armor item slot only accepts count 1
 						boolean enchanting = isEnchantingSlot(raw, ev.getView());
 						if(is != null && is.getAmount() > 1 && enchanting) {
@@ -463,8 +463,8 @@ public class InventoryUtil {
 					break;
 				case MOVE_TO_OTHER_INVENTORY:
 					//Just cancel this event tbh
-					//e.setCancelled(true);
 					handleMoveToOther(result, ev.getRawSlot(), ev.getView());
+					e.setCancelled(true);
 					break;
 				case PICKUP_ALL: case PICKUP_HALF:case PICKUP_ONE:
 					if (ev.getCurrentItem() != null) {
@@ -489,7 +489,8 @@ public class InventoryUtil {
 					if (ev.getCursor() != null) {
 						is = ev.getCursor().clone(); //Item in cursor is gonna be placed;
 						raw = ev.getRawSlot();
-						if (isItemAllowed(raw, is, ev.getView())) {
+						if (!(ev.getView() instanceof CraftInventoryView) ||
+							(ev.getView() instanceof CraftInventoryView && isItemAllowed(raw, is, (CraftInventoryView) ev.getView()))) {
 							boolean enchanting = isEnchantingSlot(raw, ev.getView());
 							if (enchanting && (ev.getCurrentItem() != null && ev.getCurrentItem().getType() != Material.AIR)) return result;
 							if (ev.getClickedInventory() != null && ev.getCurrentItem() != null) {
@@ -542,14 +543,14 @@ public class InventoryUtil {
 	private static Method con_getSlot = null;
 	private static Method slot_isAllowed = null;
 
-	private static boolean isItemAllowed(int rawSlot, ItemStack is, InventoryView view) {
+	private static boolean isItemAllowed(int rawSlot, ItemStack is, CraftInventoryView view) {
 		if (is == null || is.getType() == Material.AIR) return true;
 		Object nmsItem = MinecraftReflection.getMinecraftItemStack(is);
 		Object isAllowed = null;
 		try {
-			if(civ_getHandle == null) civ_getHandle = ((CraftInventoryView) view).getClass().getMethod("getHandle");
+			if(civ_getHandle == null) civ_getHandle = CraftInventoryView.class.getMethod("getHandle");
 			Object container = civ_getHandle.invoke(view);
-			if(con_getSlot == null) con_getSlot = container.getClass().getMethod("getSlot", int.class);
+			if(con_getSlot == null) con_getSlot = net.minecraft.server.v1_16_R1.Container.class.getMethod("getSlot", int.class);
 			Object slot = con_getSlot.invoke(container, rawSlot);
 			if(slot_isAllowed == null) {
 				slot_isAllowed = MinecraftReflection.getMinecraftClass("Slot").getMethod("isAllowed", nmsItem.getClass());
@@ -603,7 +604,7 @@ public class InventoryUtil {
 				hacker = view.getItem(raw);
 				for(int i = 0; i < 2; i++) {
 					ItemStack item = view.getItem(i);
-					if(item != null && item.getType() == Material.AIR && hacker != null && isItemAllowed(i, hacker, view)) {
+					if(item != null && item.getType() == Material.AIR && hacker != null && isItemAllowed(i, hacker, (CraftInventoryView) view)) {
 						//Single item will probably moved here
 						ItemStack equipable = hacker.clone();
 						result.add(new MovedItem(equipable, raw, i));
@@ -657,7 +658,7 @@ public class InventoryUtil {
 				boolean performAnUglyHack = false;
 				for(int i = 5; i < 9; i++) {
 					ItemStack viewItem = view.getItem(i);
-					if((viewItem == null || viewItem.getType() == Material.AIR) && is != null && isItemAllowed(i, is, view)) {
+					if((viewItem == null || viewItem.getType() == Material.AIR) && is != null && isItemAllowed(i, is, (CraftInventoryView) view)) {
 						ItemStack armor = is.clone();
 						result.add(new MovedItem(armor, raw, i));
 						int amount = is.getAmount(); //Amount to move to the next inventory
