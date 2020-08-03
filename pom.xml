@@ -19,7 +19,7 @@
 
   <properties>
     <project.build.sourceEncodeing>UTF-8</project.build.sourceEncodeing>
-    <revision>0.7.6</revision>
+    <revision>0.7.7</revision>
   </properties>
 
   <distributionManagement>
@@ -98,9 +98,6 @@
     									<goal>flatten</goal>
     								</goals>
     							</pluginExecutionFilter>
-    							<action>
-    								<ignore></ignore>
-    							</action>
     						</pluginExecution>
     					</pluginExecutions>
     				</lifecycleMappingMetadata>
