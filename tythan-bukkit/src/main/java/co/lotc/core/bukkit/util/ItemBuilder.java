@@ -1,9 +1,6 @@
 package co.lotc.core.bukkit.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,6 +24,7 @@ import lombok.var;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.persistence.PersistentDataType;
 
 @Accessors(fluent=true)
 @FieldDefaults(level=AccessLevel.PRIVATE)
@@ -78,7 +76,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder flag(ItemFlag... flags) {
-		for(var f : flags)  this.flags.add(f);
+		Collections.addAll(this.flags, flags);
 		return this;
 	}
 	
@@ -97,12 +95,12 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder tag(String key, String value) {
-		tag(ItemUtil.fuckYouBukkitJustGiveMeAKey(key), ItemTagType.STRING, value);
+		tag(ItemUtil.getNamespacedKey(key), PersistentDataType.STRING, value);
 		return this;
 	}
 	
-	public <T,Z> ItemBuilder tag(NamespacedKey key, ItemTagType<T, Z> type, Z value) {
-		meta.getCustomTagContainer().setCustomTag(key, type, value);
+	public <T,Z> ItemBuilder tag(NamespacedKey key, PersistentDataType<T, Z> type, Z value) {
+		meta.getPersistentDataContainer().set(key, type, value);
 		return this;
 	}
 	
@@ -124,9 +122,9 @@ public class ItemBuilder {
 	
 	@Value
 	@Accessors(fluent=false)
-	private static final class Taggable<T,Z> {
+	private static class Taggable<T,Z> {
 		NamespacedKey key;
-		ItemTagType<T, Z> type;
+		PersistentDataType<T, Z> type;
 		Z value;
 	}
 	

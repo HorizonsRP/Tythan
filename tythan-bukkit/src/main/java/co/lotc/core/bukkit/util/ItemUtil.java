@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import co.lotc.core.bukkit.TythanBukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -35,6 +36,7 @@ import lombok.NonNull;
 import lombok.var;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.persistence.PersistentDataType;
 
 public class ItemUtil {
 	private ItemUtil() {}
@@ -54,9 +56,8 @@ public class ItemUtil {
 	public static void setCustomTag(@NonNull ItemMeta meta, String key, String value) {
 		if("true".equals(value) || "false".equals(value))
 			throw new IllegalArgumentException("Values true/false cannot be serialized so they are forbidden!");
-		
-		var container = meta.getCustomTagContainer();
-		container.setCustomTag(fuckYouBukkitJustGiveMeAKey(key), ItemTagType.STRING, value);
+		var container = meta.getPersistentDataContainer();
+		container.set(getNamespacedKey(key), PersistentDataType.STRING, value);
 	}
 	
 	public static String getCustomTag(ItemStack item, String key) {
@@ -66,8 +67,13 @@ public class ItemUtil {
 	}
 	
 	public static String getCustomTag(ItemMeta meta, String key) {
-		var container = meta.getCustomTagContainer();
-		return container.getCustomTag(fuckYouBukkitJustGiveMeAKey(key), ItemTagType.STRING);
+		// Legacy
+		if (meta.getCustomTagContainer().hasCustomTag(getLegacyNamespacedKey(key), ItemTagType.STRING)) {
+			updateDataTag(meta, key);
+		}
+
+		var container = meta.getPersistentDataContainer();
+		return container.get(getNamespacedKey(key), PersistentDataType.STRING);
 	}
 	
 	public static boolean hasCustomTag(ItemStack item, String key) {
@@ -76,8 +82,13 @@ public class ItemUtil {
 	}
 	
 	public static boolean hasCustomTag(@NonNull ItemMeta meta, String key) {
-		var container = meta.getCustomTagContainer();
-		return container.hasCustomTag(fuckYouBukkitJustGiveMeAKey(key), ItemTagType.STRING);
+		// Legacy
+		if (meta.getCustomTagContainer().hasCustomTag(getLegacyNamespacedKey(key), ItemTagType.STRING)) {
+			updateDataTag(meta, key);
+		}
+
+		var container = meta.getPersistentDataContainer();
+		return container.has(getNamespacedKey(key), PersistentDataType.STRING);
 	}
 	
 	public static void removeCustomTag(@NonNull ItemStack item, String key) {
@@ -87,17 +98,37 @@ public class ItemUtil {
 	}
 	
 	public static void removeCustomTag(@NonNull ItemMeta meta, String key) {
-		var container = meta.getCustomTagContainer();
-		container.removeCustomTag(fuckYouBukkitJustGiveMeAKey(key));
+		// Legacy
+		if (meta.getCustomTagContainer().hasCustomTag(getLegacyNamespacedKey(key), ItemTagType.STRING)) {
+			updateDataTag(meta, key);
+		}
+
+		var container = meta.getPersistentDataContainer();
+		container.remove(getNamespacedKey(key));
 	}
-	
-	@SuppressWarnings("deprecation")
-	static NamespacedKey fuckYouBukkitJustGiveMeAKey(String rawKey) {
+
+	public static void updateDataTag(@NonNull ItemMeta meta, String key) {
+		var legacyKey = getLegacyNamespacedKey(key);
+		var container = meta.getCustomTagContainer();
+		String data = container.getCustomTag(legacyKey, ItemTagType.STRING);
+
+		if (data != null) {
+			var dataContainer = meta.getPersistentDataContainer();
+			dataContainer.set(getNamespacedKey(key), PersistentDataType.STRING, data);
+			container.removeCustomTag(legacyKey);
+		}
+	}
+
+	static NamespacedKey getNamespacedKey(String rawKey) {
+		return new NamespacedKey(TythanBukkit.get(), rawKey);
+	}
+
+	private static NamespacedKey getLegacyNamespacedKey(String key) {
 		//The data is stored as NBT tags
 		//Structure is inside a compound called PublicBukkitValues
 		//Key-value is keys as NamespacedKey (pluginName:key) and value as provided
 		//Can be any of the NBT primitive types but storing as string is fine
-		return new NamespacedKey("lotc", rawKey);
+		return new NamespacedKey("lotc", key);
 	}
 	
 	private static Method getRaw = null;
@@ -196,9 +227,9 @@ public class ItemUtil {
 			ItemStack is = ItemStack.deserialize(yaml.getConfigurationSection("item").getValues(true));
 			//We prefer a ItemStack here instead of a CraftItemStack (the deserialize creates CIS by some strange salem witchcraft)
 			//Doing this ensures future isSimilar methods against the deserialized item wont fail on Damage:0 nbt tag equals checks
-			return is == null? null : new ItemStack(is);
+			return is.getType().equals(Material.AIR)? null : new ItemStack(is);
 		} catch (InvalidConfigurationException e) {
-			throw new IllegalArgumentException(e);
+			throw new IllegalArgumentException("Provided: " + yamlItem, e);
 		}
 	}
 	
