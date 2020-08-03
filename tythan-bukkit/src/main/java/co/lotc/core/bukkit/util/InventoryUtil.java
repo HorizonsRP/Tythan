@@ -576,7 +576,14 @@ public class InventoryUtil {
 			//Assume that the clicked item goes to the other inventory, but leave it there.
 			int possibleTargetSpot = raw < view.getTopInventory().getSize()?
 					view.getTopInventory().getSize() : 0;
-					result.add(new MovedItem(view.getItem(raw).clone(), raw, possibleTargetSpot));
+			{
+				ItemStack item = view.getItem(raw);
+				if (item != null) {
+					result.add(new MovedItem(item.clone(), raw, possibleTargetSpot));
+				} else {
+					throw new NullPointerException("Null itemstack from raw slot data.");
+				}
+			}
 		case CHEST:
 		case ENDER_CHEST:
 		case DISPENSER:
