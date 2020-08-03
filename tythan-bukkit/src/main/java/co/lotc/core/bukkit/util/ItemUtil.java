@@ -56,6 +56,10 @@ public class ItemUtil {
 	public static void setCustomTag(@NonNull ItemMeta meta, String key, String value) {
 		if("true".equals(value) || "false".equals(value))
 			throw new IllegalArgumentException("Values true/false cannot be serialized so they are forbidden!");
+		// Legacy
+		if (meta.getCustomTagContainer().hasCustomTag(getLegacyNamespacedKey(key), ItemTagType.STRING)) {
+			updateDataTag(meta, key);
+		}
 		var container = meta.getPersistentDataContainer();
 		container.set(getNamespacedKey(key), PersistentDataType.STRING, value);
 	}
@@ -98,13 +102,8 @@ public class ItemUtil {
 	}
 	
 	public static void removeCustomTag(@NonNull ItemMeta meta, String key) {
-		// Legacy
-		if (meta.getCustomTagContainer().hasCustomTag(getLegacyNamespacedKey(key), ItemTagType.STRING)) {
-			updateDataTag(meta, key);
-		}
-
-		var container = meta.getPersistentDataContainer();
-		container.remove(getNamespacedKey(key));
+		meta.getCustomTagContainer().removeCustomTag(getLegacyNamespacedKey(key));
+		meta.getPersistentDataContainer().remove(getNamespacedKey(key));
 	}
 
 	public static void updateDataTag(@NonNull ItemMeta meta, String key) {
