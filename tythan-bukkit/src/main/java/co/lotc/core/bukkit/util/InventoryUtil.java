@@ -402,7 +402,9 @@ public class InventoryUtil {
 					raw = ev.getRawSlot();
 					is = ev.getView().getItem(hotbarRawSlot);
 
-					if(raw != hotbarRawSlot && isItemAllowed(raw, is, (CraftInventoryView) ev.getView())) {
+					if(raw != hotbarRawSlot &&
+					   (!(ev.getView() instanceof CraftInventoryView) ||
+						(ev.getView() instanceof CraftInventoryView && isItemAllowed(raw, is, (CraftInventoryView) ev.getView())))) {
 						//Enchanting table / horse armor item slot only accepts count 1
 						boolean enchanting = isEnchantingSlot(raw, ev.getView());
 						if(is != null && is.getAmount() > 1 && enchanting) {
