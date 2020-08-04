@@ -53,7 +53,7 @@ public abstract class BookStream {
 	 */
 	public void setBookData(ItemStack book) {
 		if (book.getType().equals(Material.WRITABLE_BOOK)) {
-			this.book = book;
+			this.book = book.clone();
 		}
 	}
 
@@ -66,6 +66,7 @@ public abstract class BookStream {
 	public void open(Player player) {
 		if (book.getType().equals(Material.WRITTEN_BOOK)) {
 			player.openBook(book);
+			activeStreams.remove(holder.getUniqueId());
 		} else {
 			int slot = player.getInventory().getHeldItemSlot();
 			ItemStack oldItem = player.getInventory().getItem(slot);
