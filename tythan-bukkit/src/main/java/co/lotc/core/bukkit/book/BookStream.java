@@ -58,18 +58,24 @@ public abstract class BookStream {
 	}
 
 	/**
-	 * Swaps the book for the given player and registers them to the BookListener.
+	 * Swaps writable books with the given player's item and registers
+	 * them to the BookListener, or simply opens the book if it's specifically
+	 * a WRITTEN_BOOK just meant for reading.
 	 * @param player The player to swap the book for.
 	 */
 	public void open(Player player) {
-		int slot = player.getInventory().getHeldItemSlot();
-		ItemStack oldItem = player.getInventory().getItem(slot);
+		if (book.getType().equals(Material.WRITTEN_BOOK)) {
+			player.openBook(book);
+		} else {
+			int slot = player.getInventory().getHeldItemSlot();
+			ItemStack oldItem = player.getInventory().getItem(slot);
 
-		ItemUtil.setCustomTag(this.book, BOOK_TAG, player.getUniqueId().toString());
-		BookListener.addStreamMap(player, this);
-		BookListener.addItemMap(player, slot, oldItem);
+			ItemUtil.setCustomTag(this.book, BOOK_TAG, player.getUniqueId().toString());
+			BookListener.addStreamMap(player, this);
+			BookListener.addItemMap(player, slot, oldItem);
 
-		player.getInventory().setItem(slot, book);
+			player.getInventory().setItem(slot, book);
+		}
 	}
 
 	/**

@@ -2,6 +2,7 @@ package co.lotc.core.bukkit.book;
 
 import co.lotc.core.bukkit.TythanBukkit;
 import co.lotc.core.bukkit.util.ItemUtil;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -59,6 +60,8 @@ public class BookListener implements Listener {
 	public void onBookClose(PlayerEditBookEvent e) {
 		if (ItemUtil.hasCustomTag(e.getPreviousBookMeta(), BookStream.BOOK_TAG)) {
 
+			e.getPlayer().sendMessage(ChatColor.DARK_GRAY + "Returning item...");
+
 			// CANCEL
 			if (e.getNewBookMeta().getTitle() != null && e.getNewBookMeta().getTitle().equalsIgnoreCase("cancel")) {
 				new BukkitRunnable() {
@@ -66,7 +69,7 @@ public class BookListener implements Listener {
 					public void run() {
 						BookStream.getFor(e.getPlayer()).abort();
 					}
-				}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+				}.runTaskLaterAsynchronously(TythanBukkit.get(), 20);
 
 			// SAVE AND RETURN
 			} else {
@@ -83,7 +86,7 @@ public class BookListener implements Listener {
 						public void run() {
 							returnItem(e.getPlayer());
 						}
-					}.runTaskLaterAsynchronously(TythanBukkit.get(), 5);
+					}.runTaskLaterAsynchronously(TythanBukkit.get(), 20);
 					stream.onBookClose();
 				}
 			}
