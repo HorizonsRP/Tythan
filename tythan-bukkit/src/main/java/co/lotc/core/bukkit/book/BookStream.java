@@ -60,7 +60,9 @@ public abstract class BookStream {
 	/**
 	 * Swaps writable books with the given player's item and registers
 	 * them to the BookListener, or simply opens the book if it's specifically
-	 * a WRITTEN_BOOK just meant for reading.
+	 * a WRITTEN_BOOK just meant for reading. If you're using this for written
+	 * books, don't. Just use player.openBook(book); instead. Writable books
+	 * still should go through this method.
 	 * @param player The player to swap the book for.
 	 */
 	public void open(Player player) {
