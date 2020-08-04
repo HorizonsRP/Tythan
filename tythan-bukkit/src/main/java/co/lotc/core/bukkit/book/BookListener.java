@@ -54,7 +54,7 @@ public class BookListener implements Listener {
 	/**
 	 * Plays when a book is closed (PlayerEditBookEvent) to remove the item
 	 * BookStream from the list, if it's on it. Plays the BookStream's
-	 * onBookClose method, and returns the item after 5 ticks.
+	 * onBookClose method, and returns the item.
 	 */
 	@EventHandler(ignoreCancelled=true)
 	public void onBookClose(PlayerEditBookEvent e) {
@@ -80,14 +80,8 @@ public class BookListener implements Listener {
 					ItemStack book = new ItemStack(Material.WRITABLE_BOOK);
 					book.setItemMeta(e.getNewBookMeta());
 					stream.setBookData(book);
-
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							returnItem(e.getPlayer());
-						}
-					}.runTaskLaterAsynchronously(TythanBukkit.get(), 20);
 					stream.onBookClose();
+					returnItem(e.getPlayer());
 				}
 			}
 		}
