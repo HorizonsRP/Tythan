@@ -1,6 +1,7 @@
 package co.lotc.core.bukkit.book;
 
 import co.lotc.core.bukkit.util.ItemUtil;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -87,7 +88,7 @@ public abstract class BookStream {
 	public void abort() {
 		BookListener.returnItem(holder);
 		activeStreams.remove(holder.getUniqueId());
-		holder.sendMessage("Book entry cancelled!");
+		holder.sendMessage(ChatColor.DARK_GRAY + "Book entry cancelled!");
 	}
 
 	/**

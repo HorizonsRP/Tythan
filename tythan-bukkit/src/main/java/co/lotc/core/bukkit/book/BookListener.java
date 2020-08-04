@@ -125,7 +125,7 @@ public class BookListener implements Listener {
 
 	private boolean checkIfPlayer(HumanEntity p) {
 		if (bookStreamMap.containsKey(p.getUniqueId())) {
-			p.sendMessage("You have a book to edit!");
+			p.sendMessage(ChatColor.DARK_GRAY + "You have a book to edit!");
 			return true;
 		}
 		return false;
