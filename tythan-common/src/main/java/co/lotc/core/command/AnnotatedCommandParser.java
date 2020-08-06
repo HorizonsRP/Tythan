@@ -88,7 +88,7 @@ public class AnnotatedCommandParser {
 		
 		result.alias(anno.aliases());
 		if(!flags) result.noFlags();
-		if(desc !=  null) result.description(desc);
+		result.description(desc);
 		if(StringUtils.isNotEmpty(pex)) result.permission(pex);
 		
 		return result;
