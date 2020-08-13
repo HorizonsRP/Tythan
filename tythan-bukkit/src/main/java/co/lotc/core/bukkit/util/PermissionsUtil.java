@@ -61,6 +61,9 @@ public class PermissionsUtil {
 			future.thenAccept(user -> {
 				if (user != null) {
 					for (Node node : user.data().toCollection()) {
+						if (base.get() == Integer.MAX_VALUE) {
+							break;
+						}
 						String key = node.getKey();
 						if (key.startsWith(permission)) {
 							String[] split = key.replace(".", " ").split(" ");
@@ -80,7 +83,6 @@ public class PermissionsUtil {
 											base.set(value);
 										}
 									}
-									base.addAndGet(value);
 								}
 							} catch (Exception e) {
 								TythanBukkit.get().getLogger().warning("Node failed to parse for min/max permission: " + key);
