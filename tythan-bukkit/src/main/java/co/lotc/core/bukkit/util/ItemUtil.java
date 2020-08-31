@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import co.lotc.core.Tythan;
 import co.lotc.core.bukkit.TythanBukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -93,15 +94,6 @@ public class ItemUtil {
 
 		var container = meta.getPersistentDataContainer();
 		return container.has(getNamespacedKey(key), PersistentDataType.STRING);
-	}
-
-	public static boolean hasLegacyTag(ItemStack item, String key) {
-		if(!exists(item)) return false;
-		return hasCustomTag(item.getItemMeta(), key);
-	}
-
-	public static boolean hasLegacyTag(@NonNull ItemMeta meta, String key) {
-		return meta.getCustomTagContainer().hasCustomTag(getLegacyNamespacedKey(key), ItemTagType.STRING);
 	}
 	
 	public static void removeCustomTag(@NonNull ItemStack item, String key) {
