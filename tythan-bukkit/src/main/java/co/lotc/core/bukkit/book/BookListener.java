@@ -81,7 +81,12 @@ public class BookListener implements Listener {
 					book.setItemMeta(e.getNewBookMeta());
 					stream.setBookData(book);
 					stream.onBookClose();
-					returnItem(e.getPlayer());
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							returnItem(e.getPlayer());
+						}
+					}.runTaskLater(TythanBukkit.get(), 5);
 				}
 			}
 		}
