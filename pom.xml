@@ -22,13 +22,6 @@
     <revision>1.16.2.4</revision>
   </properties>
 
-  <distributionManagement>
-      <repository>
-          <id>lotc-release</id>
-          <url>https://repo.lordofthecraft.net/artifactory/lotc-releases/</url>
-      </repository>
-  </distributionManagement>
-
   <repositories>
 	<repository>
 		<id>minecraft-libraries</id>
