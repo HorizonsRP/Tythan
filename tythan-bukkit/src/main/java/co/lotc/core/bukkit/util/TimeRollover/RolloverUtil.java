@@ -44,7 +44,7 @@ public class RolloverUtil {
 	public static void startRolloverChecking() {
 		if (checker == null || checker.isCancelled()) {
 			checker = getNewChecker();
-			checker.runTaskTimerAsynchronously(TythanBukkit.get(), 0, 600);
+			checker.runTaskTimer(TythanBukkit.get(), 0, 600);
 		}
 	}
 
