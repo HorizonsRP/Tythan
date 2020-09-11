@@ -44,6 +44,9 @@ public class RolloverUtil {
 		};
 	}
 
+	/**
+	 * Enable the rollover runnable.
+	 */
 	public static void startRolloverChecking() {
 		if (checker == null || checker.isCancelled()) {
 			checker = getNewChecker();
@@ -51,14 +54,20 @@ public class RolloverUtil {
 		}
 	}
 
+	/**
+	 * Disable the rollover runnable.
+	 */
 	public static void stopRolloverChecking() {
 		if (checker != null && !checker.isCancelled()) {
 			checker.cancel();
 		}
 	}
 
+	/**
+	 * @return If the rollover runnable is currently running.
+	 */
 	public static boolean isRolloverChecking() {
-		return !checker.isCancelled();
+		return checker != null && !checker.isCancelled();
 	}
 
 }

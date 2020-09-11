@@ -3,6 +3,9 @@ package co.lotc.core.bungee.util.TimeRollover;
 import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Event;
 
+/**
+ * Is thrown by RolloverUtil once per hour.
+ */
 public class HourRolloverEvent extends Event implements Cancellable {
 
 	private boolean active = true;

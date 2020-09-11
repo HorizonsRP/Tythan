@@ -43,6 +43,9 @@ public class RolloverUtil {
 		};
 	}
 
+	/**
+	 * Enable the rollover runnable.
+	 */
 	public static void startRolloverChecking() {
 		if (checker != null) {
 			checker.cancel();
@@ -50,6 +53,9 @@ public class RolloverUtil {
 		checker = TythanBungee.get().getProxy().getScheduler().schedule(TythanBungee.get(), getNewChecker(), 0, 30, TimeUnit.SECONDS);
 	}
 
+	/**
+	 * Disable the rollover runnable.
+	 */
 	public static void stopRolloverChecking() {
 		if (checker != null) {
 			checker.cancel();
