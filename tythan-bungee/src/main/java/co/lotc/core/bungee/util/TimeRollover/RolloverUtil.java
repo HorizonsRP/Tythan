@@ -1,6 +1,7 @@
 package co.lotc.core.bungee.util.TimeRollover;
 
 import co.lotc.core.bungee.TythanBungee;
+import lombok.Setter;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class RolloverUtil {
 
 	private static ScheduledTask checker = null;
-	private static LocalDateTime lastDate = null;
+	@Setter private static LocalDateTime lastDate = null;
 
 	private static Runnable getNewChecker() {
 		lastDate = LocalDateTime.now();
@@ -36,6 +37,8 @@ public class RolloverUtil {
 
 				// Hour
 				if (date.getHour() != lastDate.getHour()) pluginManager.callEvent(new HourRolloverEvent());
+
+				RolloverUtil.setLastDate(date);
 			}
 		};
 	}

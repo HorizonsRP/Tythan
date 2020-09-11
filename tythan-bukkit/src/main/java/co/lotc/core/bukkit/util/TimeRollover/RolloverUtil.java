@@ -1,6 +1,7 @@
 package co.lotc.core.bukkit.util.TimeRollover;
 
 import co.lotc.core.bukkit.TythanBukkit;
+import lombok.Setter;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -12,7 +13,7 @@ import java.time.temporal.TemporalField;
 public class RolloverUtil {
 
 	private static BukkitRunnable checker = null;
-	private static LocalDateTime lastDate = null;
+	@Setter private static LocalDateTime lastDate = null;
 
 	private static BukkitRunnable getNewChecker() {
 		lastDate = LocalDateTime.now();
@@ -37,6 +38,8 @@ public class RolloverUtil {
 
 				// Hour
 				if (date.getHour() != lastDate.getHour()) pluginManager.callEvent(new HourRolloverEvent());
+
+				RolloverUtil.setLastDate(date);
 			}
 		};
 	}
