@@ -15,6 +15,7 @@ import co.lotc.core.TythanProvider;
 import co.lotc.core.agnostic.Sender;
 import co.lotc.core.bungee.command.BrigadierInjector;
 import co.lotc.core.bungee.util.ChatBuilder;
+import co.lotc.core.bungee.util.TimeRollover.RolloverUtil;
 import co.lotc.core.bungee.wrapper.BungeeConfig;
 import co.lotc.core.bungee.wrapper.BungeeSender;
 import co.lotc.core.command.ParameterType;
@@ -48,6 +49,7 @@ public class TythanBungee extends Plugin implements Tythan {
 		saveDefaultConfig();
 		registerCommandParameterTypes();
 		ProtocolAPI.getEventManager().registerListener(new BrigadierInjector());
+		RolloverUtil.startRolloverChecking();
 	}
 
 	@Override

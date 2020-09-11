@@ -3,6 +3,7 @@ package co.lotc.core.bukkit;
 import co.lotc.core.bukkit.book.BookListener;
 import co.lotc.core.bukkit.book.BookStream;
 import co.lotc.core.bukkit.command.DefaultArgs;
+import co.lotc.core.bukkit.util.TimeRollover.RolloverUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
@@ -48,6 +49,8 @@ public class TythanBukkit extends JavaPlugin implements Tythan {
 		Run.as(this).delayed(2, ()->{ //Brigadier singleton deep inside NMS: get and inject
 			CommandNodeManager.getInstance().inject(BrigadierProvider.get().getBrigadier().getRoot());
 		});
+
+		RolloverUtil.startRolloverChecking();
 	}
 	
 	private void registerCommandParameterTypes() {

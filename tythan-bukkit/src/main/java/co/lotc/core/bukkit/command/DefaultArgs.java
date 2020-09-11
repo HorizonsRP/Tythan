@@ -89,7 +89,7 @@ public final class DefaultArgs {
 					} catch (IllegalArgumentException mustBeAHex) {
 						try {
 							return net.md_5.bungee.api.ChatColor.of(ColorUtil.hexToColor(color)); // Couldn't parse it as a normal color, how about as hex?
-						} catch (Exception ignore) {
+						} catch (Exception notAnyColor) {
 							return null; // At this point the color cannot be parsed and we return null.
 						}
 					}
