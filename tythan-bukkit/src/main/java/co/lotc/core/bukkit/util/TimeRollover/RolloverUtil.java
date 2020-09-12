@@ -24,20 +24,22 @@ public class RolloverUtil {
 
 				LocalDateTime date = LocalDateTime.now();
 
-				// Month
-				if (date.getMonth() != lastDate.getMonth()) pluginManager.callEvent(new MonthRolloverEvent());
+				if (lastDate != null) {
+					// Month
+					if (date.getMonth() != lastDate.getMonth()) pluginManager.callEvent(new MonthRolloverEvent());
 
-				// Week
-				if (!date.getDayOfWeek().equals(lastDate.getDayOfWeek()) &&
-					 date.getDayOfWeek().equals(DayOfWeek.MONDAY)         ) {
-					pluginManager.callEvent(new WeekRolloverEvent());
+					// Week
+					if (!date.getDayOfWeek().equals(lastDate.getDayOfWeek()) &&
+						date.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
+						pluginManager.callEvent(new WeekRolloverEvent());
+					}
+
+					// Day
+					if (date.getDayOfYear() != lastDate.getDayOfYear()) pluginManager.callEvent(new DayRolloverEvent());
+
+					// Hour
+					if (date.getHour() != lastDate.getHour()) pluginManager.callEvent(new HourRolloverEvent());
 				}
-
-				// Day
-				if (date.getDayOfYear() != lastDate.getDayOfYear()) pluginManager.callEvent(new DayRolloverEvent());
-
-				// Hour
-				if (date.getHour() != lastDate.getHour()) pluginManager.callEvent(new HourRolloverEvent());
 
 				RolloverUtil.setLastDate(date);
 			}

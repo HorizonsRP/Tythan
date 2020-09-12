@@ -9,20 +9,26 @@ import org.bukkit.event.HandlerList;
  */
 public class MonthRolloverEvent extends Event implements Cancellable {
 
-	private boolean active = true;
+	private boolean isCancelled;
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+
+	public MonthRolloverEvent() {
+		this.isCancelled = false;
+	}
 
 	@Override
 	public boolean isCancelled() {
-		return active;
+		return isCancelled;
 	}
 
 	@Override
 	public void setCancelled(boolean b) {
-		active = b;
+		isCancelled = b;
 	}
 
 	@Override
 	public HandlerList getHandlers() {
-		return null;
+		return HANDLER_LIST;
 	}
+
 }
