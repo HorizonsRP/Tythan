@@ -11,12 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,27 +53,42 @@ public class MenuListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void inv(InventoryClickEvent e) {
-		MenuAgent agent = getAgent(e.getInventory(), e.getWhoClicked());
-		if(agent != null) {
-			var action = new MenuAction(agent, InventoryUtil.getResultOfEvent(e), e.getClick());
-			boolean cancel = setCancel(e, action);
-			
-			List<Icon> queued = new ArrayList<>();
-			
-			if(cancel) { //button-like action
-				if(action.getMovedItems().size() == 1 && ItemUtil.exists(e.getView().getItem(e.getRawSlot())) ) {
-					asIcon(e, e.getRawSlot(), action).ifPresent(queued::add);
-				}
-			} else { //Slot-like action?
-				for(MovedItem mi : action.getMovedItems()) {
-					//Should be impossible for both to be true
-					asIcon(e, mi.getInitialSlot(), action).ifPresent(queued::add);
-					asIcon(e, mi.getFinalSlot(), action).ifPresent(queued::add);
-				}
+	public void inv(InventoryClickEvent initialEvent) {
+		InventoryClickEvent e;
+		if ((initialEvent.getClickedInventory() != null && initialEvent.getClickedInventory().getHolder() instanceof Menu) ||
+			initialEvent.getInventory().getHolder() instanceof Menu) {
+
+			if (initialEvent.getClick() == ClickType.SHIFT_LEFT) {
+				initialEvent.setCancelled(true);
+				e = new InventoryClickEvent(initialEvent.getView(), initialEvent.getSlotType(), initialEvent.getSlot(), ClickType.LEFT, InventoryAction.PICKUP_ALL);
+			} else if (initialEvent.getClick() == ClickType.SHIFT_RIGHT) {
+				initialEvent.setCancelled(true);
+				e = new InventoryClickEvent(initialEvent.getView(), initialEvent.getSlotType(), initialEvent.getSlot(), ClickType.RIGHT, InventoryAction.PICKUP_HALF);
+			} else {
+				e = initialEvent;
 			}
-			
-			maybeRun(queued, action);
+
+			MenuAgent agent = getAgent(e.getInventory(), e.getWhoClicked());
+			if (agent != null) {
+				var action = new MenuAction(agent, InventoryUtil.getResultOfEvent(e), e.getClick());
+				boolean cancel = setCancel(e, action);
+
+				List<Icon> queued = new ArrayList<>();
+
+				if (cancel) { //button-like action
+					if (action.getMovedItems().size() == 1 && ItemUtil.exists(e.getView().getItem(e.getRawSlot()))) {
+						asIcon(e, e.getRawSlot(), action).ifPresent(queued::add);
+					}
+				} else { //Slot-like action?
+					for (MovedItem mi : action.getMovedItems()) {
+						//Should be impossible for both to be true
+						asIcon(e, mi.getInitialSlot(), action).ifPresent(queued::add);
+						asIcon(e, mi.getFinalSlot(), action).ifPresent(queued::add);
+					}
+				}
+
+				maybeRun(queued, action);
+			}
 		}
 	}
 	

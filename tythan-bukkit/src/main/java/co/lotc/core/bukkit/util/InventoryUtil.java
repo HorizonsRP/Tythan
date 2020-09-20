@@ -464,7 +464,6 @@ public class InventoryUtil {
 				case MOVE_TO_OTHER_INVENTORY:
 					//Just cancel this event tbh
 					handleMoveToOther(result, ev.getRawSlot(), ev.getView());
-					e.setCancelled(true);
 					break;
 				case PICKUP_ALL: case PICKUP_HALF:case PICKUP_ONE:
 					if (ev.getCurrentItem() != null) {
