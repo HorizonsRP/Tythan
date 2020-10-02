@@ -110,7 +110,7 @@ public class BookUtil {
 	 *               [*4] = Large 4x4 Dot
 	 *               [**] = Split Diamond
 	 */
-	public static List<String> getPagesForString(String string) {
+	public static List<String> getStringAsPages(String string) {
 		List<String> output = new ArrayList<>();
 		string = string.replace("･", "[*1]");
 		string = string.replace("•", "[*]");
