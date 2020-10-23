@@ -13,8 +13,8 @@ import java.sql.SQLException;
  */
 public class HikariPool {
 
-	private static long defaultIdleTimeout = 28740000;
-	private static long defaultMaxLife = 28740000;
+	private static long defaultIdleTimeout = 28740000; // 1 min below default SQL values (7h59m)
+	private static long defaultMaxLife = 28740000; // 1 min below default SQL values (7h59m)
 	private HikariConfig config = new HikariConfig();
 	private HikariDataSource ds;
 
