@@ -34,6 +34,10 @@ public class CoreLog {
 	}
 	
 	public static void debug(String msg) {
+		if(core == null) {
+			System.out.println("[Tythan] Missing Core for Debug.");
+			return;
+		}
 		if(core.isDebugging())
 			get().info("[DEBUG] " + msg);
 	}
