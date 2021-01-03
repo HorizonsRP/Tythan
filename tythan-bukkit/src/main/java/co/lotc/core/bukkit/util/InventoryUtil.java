@@ -22,7 +22,7 @@ import org.bukkit.block.Container;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftInventoryView;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftInventoryView;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -548,7 +548,7 @@ public class InventoryUtil {
 		try {
 			if(civ_getHandle == null) civ_getHandle = CraftInventoryView.class.getMethod("getHandle");
 			Object container = civ_getHandle.invoke(view);
-			if(con_getSlot == null) con_getSlot = net.minecraft.server.v1_16_R2.Container.class.getMethod("getSlot", int.class);
+			if(con_getSlot == null) con_getSlot = net.minecraft.server.v1_16_R3.Container.class.getMethod("getSlot", int.class);
 			Object slot = con_getSlot.invoke(container, rawSlot);
 			if(slot_isAllowed == null) {
 				slot_isAllowed = MinecraftReflection.getMinecraftClass("Slot").getMethod("isAllowed", nmsItem.getClass());
