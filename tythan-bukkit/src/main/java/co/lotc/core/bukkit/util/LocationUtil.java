@@ -11,7 +11,7 @@ import org.bukkit.entity.LivingEntity;
 
 public class LocationUtil {
 
-	public enum YawUtil {
+	public enum Direction {
 		NEG_NORTH(-180),
 		NORTHEAST(-135),
 		EAST(-90),
@@ -25,16 +25,16 @@ public class LocationUtil {
 		@Getter
 		private final float yaw;
 
-		private YawUtil(int yaw) {
+		private Direction(int yaw) {
 			this.yaw = yaw;
 		}
 
-		public static YawUtil getYawFromDirection(String directionName) {
+		public static Direction getYawFromDirection(String directionName) {
 			if (directionName.equalsIgnoreCase("north")) {
 				return POS_NORTH;
 			}
 
-			for (YawUtil direction : values()) {
+			for (Direction direction : values()) {
 				if (direction.name().equalsIgnoreCase(directionName)) {
 					return direction;
 				}
@@ -42,13 +42,13 @@ public class LocationUtil {
 			return POS_NORTH;
 		}
 
-		public static YawUtil getDirectionFromYaw(float yaw) {
-			YawUtil output = NEG_NORTH;
+		public static Direction getDirectionFromYaw(float yaw) {
+			Direction output = NEG_NORTH;
 			if (yaw > 180 || yaw < -180) {
 				return output;
 			}
 
-			for (YawUtil direction : values()) {
+			for (Direction direction : values()) {
 				if (direction == output) {
 					continue;
 				}
