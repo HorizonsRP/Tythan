@@ -2,6 +2,7 @@ package co.lotc.core.bukkit.util;
 
 import java.util.List;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,6 +10,64 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public class LocationUtil {
+
+	public enum YawUtil {
+		NEG_NORTH(-180),
+		NORTHEAST(-135),
+		EAST(-90),
+		SOUTHEAST(-45),
+		SOUTH(0),
+		SOUTHWEST(45),
+		WEST(90),
+		NORTHWEST(135),
+		POS_NORTH(180);
+
+		@Getter
+		private final float yaw;
+
+		private YawUtil(int yaw) {
+			this.yaw = yaw;
+		}
+
+		public static YawUtil getYawFromDirection(String directionName) {
+			if (directionName.equalsIgnoreCase("north")) {
+				return POS_NORTH;
+			}
+
+			for (YawUtil direction : values()) {
+				if (direction.name().equalsIgnoreCase(directionName)) {
+					return direction;
+				}
+			}
+			return POS_NORTH;
+		}
+
+		public static YawUtil getDirectionFromYaw(float yaw) {
+			YawUtil output = NEG_NORTH;
+			if (yaw > 180 || yaw < -180) {
+				return output;
+			}
+
+			for (YawUtil direction : values()) {
+				if (direction == output) {
+					continue;
+				}
+
+				if (yaw < direction.yaw) {
+					float difference = (direction.yaw - output.yaw)/2;
+					if (yaw >= direction.yaw - difference) {
+						output = direction;
+					}
+					break;
+				} else {
+					output = direction;
+				}
+			}
+
+			return output;
+		}
+	}
+
 	private LocationUtil() {}
 
 	public static boolean isClose(Entity e, Location l) {
