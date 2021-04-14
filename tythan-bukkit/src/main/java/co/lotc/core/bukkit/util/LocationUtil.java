@@ -29,7 +29,7 @@ public class LocationUtil {
 			this.yaw = yaw;
 		}
 
-		public static Direction getYawFromDirection(String directionName) {
+		public static Direction getDirectionByName(String directionName) {
 			if (directionName.equalsIgnoreCase("north")) {
 				return POS_NORTH;
 			}
