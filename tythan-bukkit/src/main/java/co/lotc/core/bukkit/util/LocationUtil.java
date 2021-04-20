@@ -1,13 +1,21 @@
 package co.lotc.core.bukkit.util;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import co.lotc.core.Tythan;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class LocationUtil {
 
@@ -65,6 +73,38 @@ public class LocationUtil {
 			}
 
 			return output;
+		}
+	}
+
+	public static String serializeLocation(Location location) {
+		YamlConfiguration yaml = new YamlConfiguration();
+		yaml.set("l", location.serialize());
+		return yaml.saveToString();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Location deserializeLocation(String serializedLocation) {
+		YamlConfiguration yaml = new YamlConfiguration();
+		try {
+			yaml.loadFromString(serializedLocation);
+			if(!yaml.isList("l")) throw new IllegalArgumentException("String must have a location under key 'l'");
+			List<Location> locations = yaml.getList("l").stream()
+										   .map(ent -> (Map<String, Object>) ent)
+										   .map(ent -> ent == null ? null : Location.deserialize(ent))
+										   .collect(Collectors.toList());
+			if (locations.size() > 0) {
+				if (locations.size() > 1 && Tythan.get().isDebugging()) {
+					Tythan.get().getLogger().warning("[DEBUG] Found more than one location in the provided serialized location.");
+				}
+				return locations.get(0);
+			} else {
+				if (Tythan.get().isDebugging()) {
+					Tythan.get().getLogger().warning("[DEBUG] Found zero locations in the provided serialized location.");
+				}
+				return null;
+			}
+		} catch (InvalidConfigurationException e) {
+			throw new IllegalArgumentException(e);
 		}
 	}
 
