@@ -4,12 +4,7 @@ import static org.bukkit.event.inventory.InventoryAction.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -146,10 +141,15 @@ public class InventoryUtil {
 	 * @return What couldn't be added
 	 */
 	public static HashMap<Integer, ItemStack> addItem(final Inventory inv, final ItemStack... items) {
-		Validate.noNullElements(items, "Item cannot be null");
 		final HashMap<Integer, ItemStack> leftover = new HashMap<>();
 		for (int i = 0; i < items.length; ++i) {
 			final ItemStack item = items[i];
+			if (item == null) {
+				if (Tythan.get().isDebugging()) {
+					Tythan.get().getLogger().warning("[DEBUG] Failed to add null item.");
+				}
+				continue;
+			}
 			while (true) {
 				final int firstPartial = firstPartial(item, inv);
 				if (firstPartial == -1) {
