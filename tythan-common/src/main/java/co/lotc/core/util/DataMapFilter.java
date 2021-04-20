@@ -2,9 +2,11 @@ package co.lotc.core.util;
 
 import co.lotc.core.Tythan;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * A data filtering class used for ensuring that any data you're pulling from a map is the correct
@@ -151,6 +153,20 @@ public class DataMapFilter {
 	 */
 	public boolean containsKey(String key) {
 		return data.containsKey(key);
+	}
+
+	/**
+	 * @return A set of keys found in this DataMapFilter.
+	 */
+	public Set<String> keySet() {
+		return data.keySet();
+	}
+
+	/**
+	 * @return A collection of values found in this DataMapFilter.
+	 */
+	public Collection<Object> values() {
+		return data.values();
 	}
 
 }
