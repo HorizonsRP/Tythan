@@ -76,35 +76,43 @@ public class LocationUtil {
 		}
 	}
 
-	public static String serializeLocation(Location location) {
-		YamlConfiguration yaml = new YamlConfiguration();
-		yaml.set("l", location.serialize());
-		return yaml.saveToString();
+	public static String serializeLocationToString(Location location) {
+		return serializeLocationToYAML(location).saveToString();
 	}
 
-	@SuppressWarnings("unchecked")
+	public static YamlConfiguration serializeLocationToYAML(Location location) {
+		YamlConfiguration yaml = new YamlConfiguration();
+		yaml.set("l", location.serialize());
+		return yaml;
+	}
+
 	public static Location deserializeLocation(String serializedLocation) {
 		YamlConfiguration yaml = new YamlConfiguration();
 		try {
 			yaml.loadFromString(serializedLocation);
-			if(!yaml.isList("l")) throw new IllegalArgumentException("String must have a location under key 'l'");
-			List<Location> locations = yaml.getList("l").stream()
-										   .map(ent -> (Map<String, Object>) ent)
-										   .map(ent -> ent == null ? null : Location.deserialize(ent))
-										   .collect(Collectors.toList());
-			if (locations.size() > 0) {
-				if (locations.size() > 1 && Tythan.get().isDebugging()) {
-					Tythan.get().getLogger().warning("[DEBUG] Found more than one location in the provided serialized location.");
-				}
-				return locations.get(0);
-			} else {
-				if (Tythan.get().isDebugging()) {
-					Tythan.get().getLogger().warning("[DEBUG] Found zero locations in the provided serialized location.");
-				}
-				return null;
-			}
+			return deserializeLocation(yaml);
 		} catch (InvalidConfigurationException e) {
 			throw new IllegalArgumentException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Location deserializeLocation(YamlConfiguration yaml) throws IllegalArgumentException {
+		if (!yaml.isList("l")) throw new IllegalArgumentException("String must have a location under key 'l'");
+		List<Location> locations = yaml.getList("l").stream()
+									   .map(ent -> (Map<String, Object>) ent)
+									   .map(ent -> ent == null ? null : Location.deserialize(ent))
+									   .collect(Collectors.toList());
+		if (locations.size() > 0) {
+			if (locations.size() > 1 && Tythan.get().isDebugging()) {
+				Tythan.get().getLogger().warning("[DEBUG] Found more than one location in the provided serialized location.");
+			}
+			return locations.get(0);
+		} else {
+			if (Tythan.get().isDebugging()) {
+				Tythan.get().getLogger().warning("[DEBUG] Found zero locations in the provided serialized location.");
+			}
+			return null;
 		}
 	}
 
