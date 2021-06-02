@@ -52,6 +52,11 @@ public class DataMapFilter {
 		}
 	}
 
+	public static Class getFilter(String alias) {
+		String key = DATA_MAP.get(alias.toLowerCase());
+		return CLASS_MAP.get(key);
+	}
+
 	// INSTANCE //
 	private final Map<String, Object> data = new HashMap<>();
 
