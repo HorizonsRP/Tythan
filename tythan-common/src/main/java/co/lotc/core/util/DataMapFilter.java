@@ -26,6 +26,7 @@ public class DataMapFilter {
 	 * @param clazz The class type that this data entry represents.
 	 */
 	public static void addFilter(String[] aliases, String key, Class clazz) {
+		addFilter(key, key, clazz);
 		for (String str : aliases) {
 			addFilter(str, key, clazz);
 		}
@@ -46,8 +47,8 @@ public class DataMapFilter {
 				Tythan.get().getLogger().info("Duplicate mapping for key '" + alias.toLowerCase() + "'.");
 			}
 		} else {
-			DATA_MAP.put(alias.toLowerCase(), key);
-			CLASS_MAP.put(key, clazz);
+			DATA_MAP.put(alias.toLowerCase(), key.toLowerCase());
+			CLASS_MAP.put(key.toLowerCase(), clazz);
 		}
 	}
 
@@ -97,19 +98,19 @@ public class DataMapFilter {
 	}
 
 	/**
-	 * Attempt to add data to this DataMapFilter with the given key and object.
-	 * @param key The key string to appropriately map this data
+	 * Attempt to add data to this DataMapFilter with the given alias and object.
+	 * @param alias The alias string to appropriately map this data
 	 * @param value The object to map to this data. If it's not the appropriate class it will be rejected.
 	 * @return The DataMapFilter being acted upon.
 	 */
-	public DataMapFilter put(String key, Object value) {
-		String output = DATA_MAP.get(key);
-		Class clazz = CLASS_MAP.get(output);
+	public DataMapFilter put(String alias, Object value) {
+		String key = DATA_MAP.get(alias.toLowerCase());
+		Class clazz = CLASS_MAP.get(key);
 		try {
 			if (value == null || (clazz != null && clazz.isInstance(value))) {
-				data.put(output, value);
+				data.put(key, value);
 			} else {
-				Tythan.get().getLogger().warning("Wrong data type submitted for '" + output + "'. Expected instance of " + clazz.toString() + ", received " + value.getClass().toString());
+				Tythan.get().getLogger().warning("Wrong data type submitted for '" + key + "'. Expected instance of " + clazz.toString() + ", received " + value.getClass().toString());
 			}
 		} catch (Exception e) {
 			if (Tythan.get().isDebugging()) {
@@ -124,7 +125,7 @@ public class DataMapFilter {
 					valueString = value.getClass().toString();
 				}
 
-				Tythan.get().getLogger().warning("Wrong data type submitted for '" + output + "'. Expected instance of " + clazzString + ", received " + valueString);
+				Tythan.get().getLogger().warning("Wrong data type submitted for '" + key + "'. Expected instance of " + clazzString + ", received " + valueString);
 				e.printStackTrace();
 			}
 		}
@@ -140,18 +141,20 @@ public class DataMapFilter {
 	}
 
 	/**
-	 * @param key The key to search for.
+	 * @param alias The key/alias to search for.
 	 * @return The object which is mapped to the given key, if it exists.
 	 */
-	public Object get(String key) {
+	public Object get(String alias) {
+		String key = DATA_MAP.get(alias.toLowerCase());
 		return data.get(key);
 	}
 
 	/**
-	 * @param key The key to search for.
+	 * @param alias The key/alias to search for.
 	 * @return Whether or not there is any data for the given key.
 	 */
-	public boolean containsKey(String key) {
+	public boolean containsKey(String alias) {
+		String key = DATA_MAP.get(alias.toLowerCase());
 		return data.containsKey(key);
 	}
 
