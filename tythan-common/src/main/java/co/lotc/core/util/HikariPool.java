@@ -84,9 +84,16 @@ public class HikariPool {
 		config.setJdbcUrl(jdbc_url);
 		config.setIdleTimeout(idleTimeout);
 		config.setMaxLifetime(maxLifetime);
-		config.addDataSourceProperty("cachePrepStmts", "true");
-		config.addDataSourceProperty("prepStmtCacheSize", "250");
-		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+		config.addDataSourceProperty("cachePrepStmts", true);
+		config.addDataSourceProperty("prepStmtCacheSize", 250);
+		config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+		config.addDataSourceProperty("useServerPrepStmts", true);
+		config.addDataSourceProperty("cacheResultSetMetadata", true);
+		config.addDataSourceProperty("tcpKeepAlive", true);
+		config.setMaximumPoolSize(20);
+		config.setMinimumIdle(0);
+		config.setIdleTimeout(30000);
+		config.setLeakDetectionThreshold(60 * 1000);
 		ds = new HikariDataSource(config);
 	}
 
