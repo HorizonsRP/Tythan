@@ -16,8 +16,8 @@ import java.util.Set;
 public class DataMapFilter {
 
 	// STATIC //
-	private static Map<String, String> DATA_MAP = new HashMap<>(); // input string to output string
-	private static Map<String, Class> CLASS_MAP = new HashMap<>(); // output string to class type
+	private static final Map<String, String> DATA_MAP = new HashMap<>(); // input string to output string
+	private static final Map<String, Class> CLASS_MAP = new HashMap<>(); // output string to class type
 
 	/**
 	 * Adds a new filter to the DataMapFilter
@@ -52,7 +52,7 @@ public class DataMapFilter {
 	}
 
 	// INSTANCE //
-	private Map<String, Object> data = new HashMap<>();
+	private final Map<String, Object> data = new HashMap<>();
 
 	/**
 	 * Merges all data from the provided DataMapFilter into this one.
@@ -106,7 +106,7 @@ public class DataMapFilter {
 		String output = DATA_MAP.get(key);
 		Class clazz = CLASS_MAP.get(output);
 		try {
-			if (value == null || clazz.isInstance(value)) {
+			if (value == null || (clazz != null && clazz.isInstance(value))) {
 				data.put(output, value);
 			} else {
 				Tythan.get().getLogger().warning("Wrong data type submitted for '" + output + "'. Expected instance of " + clazz.toString() + ", received " + value.getClass().toString());
